@@ -1,3 +1,14 @@
 module.exports = {
   reactStrictMode: true,
+  env: {
+    AUTH0_SECRET: '515384d6504890af63818ec510932ca7',
+    AUTH0_ISSUER_BASE_URL: 'https://dev-hfkkr2g4.auth0.com',
+    AUTH0_CLIENT_ID: 'c07RBGi4xZ1KZOVfmLpDvGj8h7Y6RAEP',
+    AUTH0_CLIENT_SECRET: 'MmxirzxU3QnIyRR2ng1-eNZ8pd7F5otW-HEnMFvBWZgxOX3Egw9XggjE_AY9eK41',
+    AUTH0_BASE_URL: 'http://localhost:3000',
+    NEXT_PUBLIC_REDIRECT_URI: '/api/callback',
+    NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI: '/',
+    SESSION_COOKIE_SECRET: '515384d6504890af63818ec510932ca7',
+    SESSION_COOKIE_LIFETIME: 10
+  }
 }
