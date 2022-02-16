@@ -147,7 +147,7 @@ export default function Client({ data }) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ user: "edythc", decision: value })
+      body: JSON.stringify({ user: email, decision: value })
     }
 
     await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/status/${client.id}`, requestOptions)
