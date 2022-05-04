@@ -384,7 +384,7 @@ const Details = ({ questions, data }) => (
         </Table.Header>
 
         <Table.Body>
-          { data !== undefined && Object.keys(data).map((key, index) => {
+          { data !== undefined && data && Object.keys(data).map((key, index) => {
             delete data.clientId;
 
             return (
@@ -412,11 +412,17 @@ const ProgramDetails = ({ selections, programs }) => {
     key: program,
     value: program,
     text: program[0].toUpperCase() + program.slice(1)
-  }))
+  }));
 
-  const handleChange = (e, { value }) => setProgram(value);
+  console.log(programs, selections, program)
 
-  console.log(selections)
+  const handleChange = (e, { value }) => {
+    if (value === "wood" || value === "vinyl") {
+      setProgram("woodVinyl");
+    } else {
+      setProgram(value);
+    }
+  }
 
   return (
     <Grid centered>
