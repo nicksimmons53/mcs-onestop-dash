@@ -2,12 +2,12 @@ import Head from "next/head";
 import Link from "next/link";
 import {useUser} from "@auth0/nextjs-auth0";
 import Layout from "../components/layout";
-import {Button, Card} from "semantic-ui-react";
+import {Button, Card, Center, Loader} from "semantic-ui-react";
 
 export default function Home() {
   const { user, isLoading, error } = useUser();
 
-  if (isLoading) return <div>...Loading</div>;
+  if (isLoading) return <Center><Loader content={"Loading"}/></Center>;
   if (error) return <div>...ERROR</div>;
   if (!user) window.location.href = "/api/auth/login";
 
