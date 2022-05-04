@@ -130,9 +130,8 @@ export default function Client({ data }) {
   const { user } = useUser();
   const [ activeView, setActiveView ] = React.useState("Basic Information");
   const [ selectedDept, setSelectedDept ] = React.useState("Select Program");
-  let client = data.info;
+  let client = data;
   let selections = Object.keys(data.selections).filter(program => data.selections[program] === 1);
-  let approvals = data.approvals[0];
   let programs = data.programs;
   let files = undefined;
 
@@ -157,11 +156,11 @@ export default function Client({ data }) {
   return (
     <Layout>
       <Head>
-        <title>MCS | {client.name}</title>
+        <title>MCS | {client.basicInfo.name}</title>
       </Head>
 
       <Menu stackable>
-        <Menu.Item header>{client.name}</Menu.Item>
+        <Menu.Item header>{client.basicInfo.name}</Menu.Item>
         <Menu.Item name={"Basic Information"} active={activeView === "Basic Information"} onClick={handleItemClick} color={"blue"}/>
         <Menu.Item name={"Accounting Details"} active={activeView === "Accounting Details"} onClick={handleItemClick} color={"blue"}/>
         <Menu.Item name={"Expediting Details"} active={activeView === "Expediting Details"} onClick={handleItemClick} color={"blue"}/>
@@ -186,16 +185,16 @@ export default function Client({ data }) {
         </Menu.Item>
       </Menu>
 
-      { activeView === "Basic Information" && <BasicInfo data={data} selections={selections} approvals={approvals} files={files}/> }
-      { activeView === "Accounting Details" && <Details data={data.details.accounting[0]} questions={questions.accounting}/> }
-      { activeView === "Expediting Details" && <Details data={data.details.expediting[0]} questions={questions.expediting}/> }
+      { activeView === "Basic Information" && <BasicInfo data={data} selections={selections} files={files}/> }
+      { activeView === "Accounting Details" && data.tables !== undefined && <Details data={data.tables.accounting_details} questions={questions.accounting}/> }
+      { activeView === "Expediting Details" && data.tables !== undefined && <Details data={data.tables.expediting_details} questions={questions.expediting}/> }
       { activeView === "Program Details" && <ProgramDetails programs={programs} selections={selections}/> }
       { activeView === "Pricing Breakdown" && selectedDept !== "" && <PricingBreakdown data={data.parts} dept={selectedDept}/> }
     </Layout>
   )
 }
 
-const BasicInfo = ({ data, selections, approvals, files }) => (
+const BasicInfo = ({ data, selections, files }) => (
   <Grid>
     <Grid.Row columns={2} stretched>
       <Grid.Column computer={16} largeScreen={8} mobile={16} tablet={16} widescreen={8}>
@@ -344,7 +343,7 @@ const BasicInfo = ({ data, selections, approvals, files }) => (
                 </Table.Row>
               </Table.Header>
 
-              { approvals === undefined ?
+              { data.approvals === undefined ?
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell>No Data Present</Table.Cell>
@@ -354,15 +353,15 @@ const BasicInfo = ({ data, selections, approvals, files }) => (
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell>Edyth Cruz</Table.Cell>
-                    <Table.Cell>{ approvals.edythc === 1 ? "Approved" : approvals.edythc === 0 ? "Declined" : "No Response" }</Table.Cell>
+                    <Table.Cell>{ data.approvals["Edyth Cruz"] === 1 ? "Approved" : data.approvals["Edyth Cruz"] === 0 ? "Declined" : "No Response" }</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell>Kim Conover</Table.Cell>
-                    <Table.Cell>{ approvals.kimc === 1 ? "Approved" : approvals.kimc === 0 ? "Declined" : "No Response" }</Table.Cell>
+                    <Table.Cell>{ data.approvals["Kim Conover"] === 1 ? "Approved" : data.approvals["Kim Conover"] === 0 ? "Declined" : "No Response" }</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell>Lisa Kallus</Table.Cell>
-                    <Table.Cell>{ approvals.lisak === 1 ? "Approved" : approvals.lisak === 0 ? "Declined" : "No Response" }</Table.Cell>
+                    <Table.Cell>{ data.approvals["Lisa Kallus"] === 1 ? "Approved" : data.approvals["Lisa Kallus"] === 0 ? "Declined" : "No Response" }</Table.Cell>
                   </Table.Row>
                 </Table.Body>
               }
@@ -385,7 +384,7 @@ const Details = ({ questions, data }) => (
         </Table.Header>
 
         <Table.Body>
-          { Object.keys(data).map((key, index) => {
+          { data !== undefined && Object.keys(data).map((key, index) => {
             delete data.clientId;
 
             return (
@@ -416,6 +415,8 @@ const ProgramDetails = ({ selections, programs }) => {
   }))
 
   const handleChange = (e, { value }) => setProgram(value);
+
+  console.log(selections)
 
   return (
     <Grid centered>
@@ -603,22 +604,14 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const clientRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/${params.clientId}`);
-  const addressRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/addresses/${params.clientId}`);
-  const contactsRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/contacts/${params.clientId}`);
-  const selectionsRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/programs/selections/${params.clientId}`);
-  const approvalsRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/status/${params.clientId}`);
+  const clientRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/${params.clientId}/profile-data`);
   const programsRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/programs/${params.clientId}`);
-  const detailsRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/details/${params.clientId}`);
+  const detailsRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/details?clientId=${params.clientId}`);
   const partsRes = await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/pricing/${params.clientId}`);
   let data = { };
 
   await Promise.all([
     clientRes.json( ),
-    addressRes.json( ),
-    contactsRes.json( ),
-    selectionsRes.json( ),
-    approvalsRes.json( ),
     programsRes.json( ),
     detailsRes.json( ),
     partsRes.json( )

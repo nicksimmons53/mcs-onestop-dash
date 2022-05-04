@@ -15,7 +15,7 @@ const NavBar = ( props ) => {
       </Menu.Item>
       <Menu.Menu position={"right"}>
         <Menu.Item>
-          <Button color={"orange"} icon={"bell"} disabled/>
+          <Button primary icon={"bell"} disabled/>
         </Menu.Item>
         <Menu.Item>
           { user && <img src={user.picture} alt={user.name}/> }
