@@ -149,7 +149,7 @@ export default function Client({ data }) {
       body: JSON.stringify({ user: email, decision: value })
     }
 
-    await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/status/${client.id}`, requestOptions)
+    await fetch(`https://onboard.mcsurfacesinc.com/admin/clients/status/${client.basicInfo.id}`, requestOptions)
       .then((res) => console.log(res));
   };
 
