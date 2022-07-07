@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/layout";
 import {
+  border,
   Button, Checkbox, CheckboxGroup,
   Divider,
   HStack,
@@ -34,6 +35,8 @@ export default function Dashboard( )  {
   const [start, setStart] = React.useState(0);
   const [end, setEnd] = React.useState(10);
   let sorts = { name: false, firstName: false, territory: false, status: false };
+  const bgColor = useColorModeValue('white', 'gray.900');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
   let filters = {
     status: { "Potential": false, "Queued": false, "Declined": false, "Approved": false },
     territory: { "Austin": false, "Dallas": false, "Houston": false, "San Antonio": false },
@@ -128,8 +131,8 @@ export default function Dashboard( )  {
                 />
               </MenuButton>
               <MenuList
-                bg={useColorModeValue('white', 'gray.900')}
-                borderColor={useColorModeValue('gray.200', 'gray.700')}>
+                bg={bgColor}
+                borderColor={borderColor}>
                 <CheckboxGroup>
                   <MenuOptionGroup title={"Sort"}>
                     <Checkbox p={2} onChange={e => handleSort(e)} value={"name"}>by Client Name</Checkbox>
@@ -146,46 +149,6 @@ export default function Dashboard( )  {
                 </CheckboxGroup>
               </MenuList>
             </Menu>
-
-            {/*<Menu>*/}
-            {/*  <MenuButton*/}
-            {/*    py={2}*/}
-            {/*    transition="all 0.3s"*/}
-            {/*    _focus={{ boxShadow: 'none' }}>*/}
-            {/*    <IconButton*/}
-            {/*      variant="outline"*/}
-            {/*      aria-label="open menu"*/}
-            {/*      icon={<FiFilter />}*/}
-            {/*    />*/}
-            {/*  </MenuButton>*/}
-            {/*  <MenuList*/}
-            {/*    bg={useColorModeValue('white', 'gray.900')}*/}
-            {/*    borderColor={useColorModeValue('gray.200', 'gray.700')}>*/}
-            {/*    <MenuOptionGroup title={"Filter by Status"}>*/}
-            {/*      <Checkbox p={2} onChange={e => handleFilter(e)} value={["status", "Potential"]}>Potential</Checkbox>*/}
-            {/*      <Checkbox p={2} onChange={e => handleFilter(e)} value={["status", "Queued"]}>Queued</Checkbox>*/}
-            {/*      <Checkbox p={2} onChange={e => handleFilter(e)} value={["status", "Declined"]}>Declined</Checkbox>*/}
-            {/*      <Checkbox p={2} onChange={e => handleFilter(e)} value={["status", "Approved"]}>Approved</Checkbox>*/}
-            {/*      <Checkbox p={2} onChange={e => handleFilter(e)} value={["status", "Pushed"]}>Pushed</Checkbox>*/}
-            {/*    </MenuOptionGroup>*/}
-            {/*    <MenuDivider />*/}
-            {/*    <MenuOptionGroup title={"Filter by Territory"}>*/}
-            {/*      <Checkbox p={2}>Austin</Checkbox>*/}
-            {/*      <Checkbox p={2}>Dallas</Checkbox>*/}
-            {/*      <Checkbox p={2}>Houston</Checkbox>*/}
-            {/*      <Checkbox p={2}>San Antonio</Checkbox>*/}
-            {/*    </MenuOptionGroup>*/}
-            {/*    <MenuDivider />*/}
-            {/*    <MenuOptionGroup title={"Filter by Sales Rep."}>*/}
-            {/*      <Checkbox p={2}>Christina</Checkbox>*/}
-            {/*      <Checkbox p={2}>Natalia</Checkbox>*/}
-            {/*      <Checkbox p={2}>Kori</Checkbox>*/}
-            {/*      <Checkbox p={2}>Shelley</Checkbox>*/}
-            {/*      <Checkbox p={2}>Kimberly</Checkbox>*/}
-            {/*      <Checkbox p={2}>Casey</Checkbox>*/}
-            {/*    </MenuOptionGroup>*/}
-            {/*  </MenuList>*/}
-            {/*</Menu>*/}
             <ClientsPerPage/>
             <Input placeholder={"Search Clients"} onChange={handleInput}/>
           </HStack>

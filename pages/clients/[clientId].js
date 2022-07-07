@@ -169,6 +169,8 @@ export default function Client({ id }) {
   const [activeTab, setActiveTab] = React.useState("Basic Information");
   const [setToast, setShowToast] = React.useState(false);
   const toast = useToast();
+  const bgColor = useColorModeValue('white', 'gray.900');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
   const tabs = [
     "Basic Information",
     "Accounting Details",
@@ -224,8 +226,8 @@ export default function Client({ id }) {
             />
           </MenuButton>
           <MenuList
-            bg={useColorModeValue('white', 'gray.900')}
-            borderColor={useColorModeValue('gray.200', 'gray.700')}>
+            bg={bgColor}
+            borderColor={borderColor}>
             <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(1)}>Approve</MenuItem>
             <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(0)}>Decline</MenuItem>
             <Divider/>
