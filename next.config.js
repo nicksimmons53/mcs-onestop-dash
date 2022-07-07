@@ -10,5 +10,8 @@ module.exports = {
     NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI: process.env.NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI,
     SESSION_COOKIE_SECRET: process.env.SESSION_COOKIE_SECRET,
     SESSION_COOKIE_LIFETIME: 10
-  }
+  },
+  images: {
+    domains: ["s.gravatar.com"],
+  },
 }

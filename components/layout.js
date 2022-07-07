@@ -1,18 +1,14 @@
 import React from "react";
-import Navbar from "./navbar";
-import Drawer from "./drawer";
-import FileTrail from "./file-trail";
+import {Box} from "@chakra-ui/react";
+import SidebarWithHeader from "./sideDrawer";
 
 export default function Layout({ children }) {
-  const [ showSidebar, setShowSidebar ] = React.useState(false);
-
   return (
-    <>
-      <Navbar showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
-      <Drawer showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
-      <FileTrail/>
-
-      <main>{ children }</main>
-    </>
+    <SidebarWithHeader>
+      <Box p={5}>
+        {/*<FileTrail/>*/}
+        <main>{ children }</main>
+      </Box>
+    </SidebarWithHeader>
   );
 }

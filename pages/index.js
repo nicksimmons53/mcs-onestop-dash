@@ -1,14 +1,16 @@
 import Head from "next/head";
 import Link from "next/link";
+import Error from "next/error";
 import {useUser} from "@auth0/nextjs-auth0";
 import Layout from "../components/layout";
-import {Button, Card} from "semantic-ui-react";
+import Loading from "../components/loading";
+import {Box, Button, Divider, Heading, Stack} from "@chakra-ui/react";
 
 export default function Home() {
   const { user, isLoading, error } = useUser();
 
-  if (isLoading) return <div>...Loading</div>;
-  if (error) return <div>...ERROR</div>;
+  if (isLoading) return <Loading />;
+  if (error) return <Error />;
   if (!user) window.location.href = "/api/auth/login";
 
   return user && (
@@ -17,18 +19,15 @@ export default function Home() {
         <title>MCS | Dashboard</title>
       </Head>
 
-      <Card.Group>
-        <Card>
-          <Card.Content>
-            <Card.Header>Clients</Card.Header>
-          </Card.Content>
+      <Stack alignContent={"flex-start"} direction={"row"}>
+        <Box borderRadius={5} p={5} shadow='md' borderWidth='1px' width={"20%"}>
+          <Heading size={"lg"}>Clients</Heading>
+          <Divider/>
           <Link href={"/clients/dashboard"}>
-            <Button basic>
-              View
-            </Button>
+            <Button colorScheme={"blue"} mt={5} width={"100%"}>View</Button>
           </Link>
-        </Card>
-      </Card.Group>
+        </Box>
+      </Stack>
     </Layout>
   );
 }
