@@ -11,7 +11,7 @@ export default function Home() {
 
   if (isLoading) return <Loading />;
   if (error) return <Error />;
-  if (!user) window.location.href = "/api/auth/login";
+  if (!user) window.location = "/api/auth/login";
 
   return user && (
     <Layout>

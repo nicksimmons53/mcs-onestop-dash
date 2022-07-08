@@ -219,9 +219,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
               borderColor={borderColor}>
               <MenuItem>Profile</MenuItem>
               <MenuDivider />
-              <Link href={"/api/auth/logout"}>
+              <a href={"/api/auth/logout"}>
                 <MenuItem>Sign Out</MenuItem>
-              </Link>
+              </a>
             </MenuList>
           </Menu>
         </Flex>
