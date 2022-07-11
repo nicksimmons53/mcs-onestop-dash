@@ -602,7 +602,7 @@ export async function getStaticPaths() {
     params: { clientId: `${item.clientId}` }
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 }
 
 export async function getStaticProps({ params }) {
