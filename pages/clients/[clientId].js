@@ -6,6 +6,7 @@ import {
 import React from "react";
 import _ from "lodash";
 import Layout from "../../components/layout";
+import {useRouter} from 'next/router';
 import {useUser} from "@auth0/nextjs-auth0";
 import {
   Divider,
@@ -202,6 +203,10 @@ export default function Client({ id }) {
         })
       });
   }
+
+  const router = useRouter();
+
+  if (router.isFallback) return <Loading/>;
 
   if (isLoading || details.isLoading || programs.isLoading) return <Loading/>;
 
