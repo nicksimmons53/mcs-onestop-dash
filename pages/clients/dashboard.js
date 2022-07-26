@@ -36,7 +36,7 @@ export default function Dashboard( )  {
   const [end, setEnd] = React.useState(10);
   let sorts = { name: false, firstName: false, territory: false, status: false };
   const bgColor = useColorModeValue('white', 'gray.900');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const borderColor = useColorModeValue('gray.300', 'gray.700');
   let filters = {
     status: { "Potential": false, "Queued": false, "Declined": false, "Approved": false },
     territory: { "Austin": false, "Dallas": false, "Houston": false, "San Antonio": false },
@@ -115,7 +115,7 @@ export default function Dashboard( )  {
         <title>MCS | Clients</title>
       </Head>
 
-      <TableContainer borderWidth={"1px"} borderRadius={5}>
+      <TableContainer borderWidth={"1px"} borderRadius={5} borderColor={borderColor}>
         <HStack justifyContent={"space-between"} p={3}>
           <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Clients</Text>
           <HStack flex={1}>
@@ -153,7 +153,7 @@ export default function Dashboard( )  {
             <Input placeholder={"Search Clients"} onChange={handleInput}/>
           </HStack>
         </HStack>
-        <Divider/>
+        <Divider color={borderColor}/>
         <Table variant={"simple"}>
           <Thead>
             <Tr>
@@ -166,7 +166,7 @@ export default function Dashboard( )  {
           <Tbody>
             {clients.slice(start, end).map(item => (
               <Link href={`/clients/${item.clientId}`} key={item.clientId}>
-                <Tr>
+                <Tr _hover={{ cursor: "pointer" }}>
                   <Td>{item.name}</Td>
                   <Td>{item.territory}</Td>
                   <Td>{item.firstName} {item.lastName}</Td>

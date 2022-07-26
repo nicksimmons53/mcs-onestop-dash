@@ -70,6 +70,7 @@ const questions = {
     "Notes",
   ],
   cabinets: [
+    "Are Substitutions Allowed?",
     "Preferred Colors",
     "Preferred Style",
     "Overlay",
@@ -82,12 +83,14 @@ const questions = {
     "Notes"
   ],
   carpet: [
+    "Are Substitutions Allowed?",
     "Preferred Padding Brand",
     "Who Will be Doing Takeoffs?",
     "Waste Factor Percentage",
     "Notes"
   ],
   countertops: [
+    "Are Substitutions Allowed?",
     "Preferred Material Thickness",
     "Preferred Edge",
     "Waterfall Sides - Standard or Option?",
@@ -111,6 +114,7 @@ const questions = {
     "Notes"
   ],
   tile: [
+    "Are Substitutions Allowed?",
     "Floor Setting Material",
     "Floor Custom Setting Material",
     "Wall Setting Material",
@@ -147,6 +151,7 @@ const questions = {
     "Notes"
   ],
   woodVinyl: [
+    "Are Substitutions Allowed?",
     "Preferred Glue Products",
     "Other Glue Product",
     "Stain or Primed?",
@@ -168,7 +173,6 @@ export default function Client({ id }) {
   const programs = useGetClientProgramInfoQuery({ id: id });
   const pricing = useGetClientBillingPartsQuery({ id: id });
   const [activeTab, setActiveTab] = React.useState("Basic Information");
-  const [setToast, setShowToast] = React.useState(false);
   const toast = useToast();
   const bgColor = useColorModeValue('white', 'gray.900');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -217,7 +221,11 @@ export default function Client({ id }) {
       </Head>
 
       <HStack justifyContent={"space-between"} my={2}>
-        <Heading>{data.basicInfo.name}</Heading>
+        <HStack>
+          <Heading>{data.basicInfo.name}</Heading>
+
+          <Divider orientation={"vertical"}/>
+        </HStack>
 
         <Menu>
           <MenuButton
@@ -233,6 +241,8 @@ export default function Client({ id }) {
           <MenuList
             bg={bgColor}
             borderColor={borderColor}>
+            <MenuItem>Message Sales Rep.</MenuItem>
+            <Divider/>
             <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(1)}>Approve</MenuItem>
             <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(0)}>Decline</MenuItem>
             <Divider/>
@@ -607,11 +617,12 @@ export async function getStaticPaths() {
     params: { clientId: `${item.clientId}` }
   }));
 
-  return { paths, fallback: true };
+  return { paths, fallback: "blocking" };
 }
 
 export async function getStaticProps({ params }) {
   return {
     props: { id: params.clientId },
+    revalidate: 10,
   };
 }

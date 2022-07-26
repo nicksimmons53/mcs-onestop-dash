@@ -28,7 +28,8 @@ import {
   FiMenu,
   FiBell,
   FiChevronDown,
-  FiUser,
+  FiUsers,
+  FiList, FiEdit3,
 } from 'react-icons/fi';
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {useUser} from "@auth0/nextjs-auth0";
@@ -36,9 +37,10 @@ import Loading from "./loading";
 
 const LinkItems = [
   { name: 'Home', icon: FiHome, path: "/" },
-  { name: 'Clients', icon: FiUser, path: "/clients/dashboard" },
-  // { name: 'Explore', icon: FiCompass },
+  { name: 'Clients', icon: FiUsers, path: "/clients/dashboard" },
+  { name: 'Employees', icon: FiList, path: "/" },
   // { name: 'Favourites', icon: FiStar },
+  { name: 'IT Request', icon: FiEdit3, path: "/" },
   { name: 'Settings', icon: FiSettings, path: "" },
 ];
 
@@ -74,8 +76,8 @@ export default function SidebarWithHeader({ children }) {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
-  const bgColor = useColorModeValue('white', 'gray.900');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const bgColor = useColorModeValue('gray.900', 'gray.900');
+  const borderColor = useColorModeValue('gray.300', 'gray.700');
 
   return (
     <Box
@@ -88,7 +90,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
       h="full"
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontWeight="bold">
+        <Text fontSize="2xl" fontWeight="bold" color={"white"}>
           OneStop
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
@@ -108,6 +110,7 @@ const NavItem = ({ icon, children, path, ...rest }) => {
     <Link href={path} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
+        color={"white"}
         p="4"
         mt={"2"}
         mx="4"
@@ -138,8 +141,8 @@ const NavItem = ({ icon, children, path, ...rest }) => {
 const MobileNav = ({ onOpen, ...rest }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { user } = useUser();
-  const bgColor = useColorModeValue('white', 'gray.900');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const bgColor = useColorModeValue('white4', 'gray.900');
+  const borderColor = useColorModeValue('gray.300', 'gray.700');
 
   if (!user) {
     return <Loading/>
@@ -214,9 +217,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                 </Box>
               </HStack>
             </MenuButton>
-            <MenuList
-              bg={bgColor}
-              borderColor={borderColor}>
+            <MenuList>
               <MenuItem>Profile</MenuItem>
               <MenuDivider />
               <a href={"/api/auth/logout"}>
