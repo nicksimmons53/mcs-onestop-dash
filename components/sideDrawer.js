@@ -38,10 +38,10 @@ import Loading from "./loading";
 const LinkItems = [
   { name: 'Home', icon: FiHome, path: "/" },
   { name: 'Clients', icon: FiUsers, path: "/clients/dashboard" },
-  { name: 'Employees', icon: FiList, path: "/" },
+  // { name: 'Employees', icon: FiList, path: "/" },
   // { name: 'Favourites', icon: FiStar },
-  { name: 'IT Request', icon: FiEdit3, path: "/" },
-  { name: 'Settings', icon: FiSettings, path: "" },
+  { name: 'IT Request', icon: FiEdit3, path: "/help/it-request" },
+  // { name: 'Settings', icon: FiSettings, path: "" },
 ];
 
 export default function SidebarWithHeader({ children }) {
