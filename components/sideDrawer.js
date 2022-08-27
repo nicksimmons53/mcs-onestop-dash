@@ -29,7 +29,8 @@ import {
   FiBell,
   FiChevronDown,
   FiUsers,
-  FiList, FiEdit3,
+  FiList,
+  FiEdit3,
 } from 'react-icons/fi';
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {useUser} from "@auth0/nextjs-auth0";

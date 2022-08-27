@@ -43,6 +43,8 @@ export default function Dashboard( )  {
     salesRep: { "Christina": false, "Natalia": false, "Kori": false, "Shelley": false, "Kimberly": false, "Casey": false }
   };
 
+  console.log(clients)
+
   React.useEffect(( ) => {
     if (data) {
       setClients(data.clients);
@@ -54,7 +56,7 @@ export default function Dashboard( )  {
 
   const handleChange = (event) => {
     setStart(0);
-    setEnd(event.target.value);
+    setEnd(event.target.value);;
     setClientsPerPage(event.target.value)
     setNumOfPages(Math.ceil(clients.length/event.target.value));
   }
@@ -64,9 +66,14 @@ export default function Dashboard( )  {
       setClients(data.clients);
     }
 
-    setClients(data.clients.filter(client =>
-      client.name.toLowerCase().includes(event.target.value.toLowerCase())
-    ));
+    let tempClients = data.clients.filter(client =>
+        client.name.toLowerCase().includes(event.target.value.toLowerCase())
+    )
+    setClients(tempClients);
+    setActivePage(0);
+    setStart(0);
+    setEnd(clientsPerPage);
+    setNumOfPages(Math.ceil(tempClients.length/clientsPerPage));
   }
 
   const ClientsPerPage = () => (
