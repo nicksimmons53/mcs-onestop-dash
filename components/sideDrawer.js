@@ -1,48 +1,50 @@
 import React from 'react';
 import Link from "next/link";
 import {
-  IconButton,
-  Avatar,
-  Box,
-  CloseButton,
-  Flex,
-  HStack,
-  VStack,
-  Icon,
-  useColorModeValue,
-  Drawer,
-  DrawerContent,
-  Text,
-  useDisclosure,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  useColorMode,
-  Divider,
+    IconButton,
+    Avatar,
+    Box,
+    CloseButton,
+    Flex,
+    HStack,
+    VStack,
+    Icon,
+    useColorModeValue,
+    Drawer,
+    DrawerContent,
+    Text,
+    useDisclosure,
+    Menu,
+    MenuButton,
+    MenuDivider,
+    MenuItem,
+    MenuList,
+    useColorMode,
+    Divider,
 } from '@chakra-ui/react';
 import {
-  FiHome,
-  FiSettings,
-  FiMenu,
-  FiBell,
-  FiChevronDown,
-  FiUsers,
-  FiList,
-  FiEdit3,
+    FiHome,
+    FiSettings,
+    FiMenu,
+    FiBell,
+    FiChevronDown,
+    FiUsers,
+    FiList,
+    FiEdit3,
 } from 'react-icons/fi';
 import {MoonIcon, SunIcon} from "@chakra-ui/icons";
 import {useUser} from "@auth0/nextjs-auth0";
 import Loading from "./loading";
+import icon from "../public/icon.png";
+import Image from "next/future/image";
 
 const LinkItems = [
-  { name: 'Home', icon: FiHome, path: "/" },
-  { name: 'Clients', icon: FiUsers, path: "/clients/dashboard" },
-  // { name: 'Employees', icon: FiList, path: "/" },
-  // { name: 'Favourites', icon: FiStar },
-  { name: 'IT Request', icon: FiEdit3, path: "/help/it-request" },
-  // { name: 'Settings', icon: FiSettings, path: "" },
+    { name: 'Home', icon: FiHome, path: "/" },
+    { name: 'Clients', icon: FiUsers, path: "/clients/dashboard" },
+    // { name: 'Employees', icon: FiList, path: "/" },
+    // { name: 'Favourites', icon: FiStar },
+    { name: 'IT Request', icon: FiEdit3, path: "/help/it-request" },
+    // { name: 'Settings', icon: FiSettings, path: "" },
 ];
 
 export default function SidebarWithHeader({ children }) {
@@ -77,33 +79,34 @@ export default function SidebarWithHeader({ children }) {
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
-  const bgColor = useColorModeValue('gray.900', 'gray.900');
-  const borderColor = useColorModeValue('gray.300', 'gray.700');
+    const bgColor = useColorModeValue('gray.900', 'gray.900');
+    const borderColor = useColorModeValue('gray.300', 'gray.700');
 
-  return (
-    <Box
-      transition="3s ease"
-      bg={bgColor}
-      borderRight="1px"
-      borderRightColor={borderColor}
-      w={{ base: 'full', md: 60 }}
-      pos="fixed"
-      h="full"
-      {...rest}>
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontWeight="bold" color={"white"}>
-          OneStop
-        </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
-      </Flex>
-      <Divider/>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} path={link.path}>
-          {link.name}
-        </NavItem>
-      ))}
-    </Box>
-  );
+    return (
+        <Box
+            transition="3s ease"
+            bg={bgColor}
+            borderRight="1px"
+            borderRightColor={borderColor}
+            w={{ base: 'full', md: 60 }}
+            pos="fixed"
+            h="full"
+            {...rest}>
+            <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+                <Image src={icon} width={40} height={40} style={{ borderRadius: 5 }}/>
+                <Text fontSize="2xl" fontWeight="bold" color={"white"}>
+                  OneStop
+                </Text>
+                <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+            </Flex>
+            <Divider/>
+            {LinkItems.map((link) => (
+                <NavItem key={link.name} icon={link.icon} path={link.path}>
+                    {link.name}
+                </NavItem>
+            ))}
+        </Box>
+    );
 };
 
 const NavItem = ({ icon, children, path, ...rest }) => {

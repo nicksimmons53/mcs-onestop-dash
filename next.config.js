@@ -14,4 +14,9 @@ module.exports = {
   images: {
     domains: ["s.gravatar.com"],
   },
+  experimental: {
+    images: {
+      allowFutureImage: true,
+    },
+  },
 }
