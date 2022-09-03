@@ -33,7 +33,7 @@ import {
   MenuOptionGroup,
   Checkbox,
   Container,
-  MenuItem, TabPanel, TabPanels, Select, useToast
+  MenuItem, TabPanel, TabPanels, Select, useToast, VStack, Tag
 } from "@chakra-ui/react";
 import {
   useGetClientAccountingDetailsQuery, useGetClientBillingPartsQuery,
@@ -165,9 +165,18 @@ const questions = {
   ]
 };
 
+const statusColors = {
+  Potential: "#1A5276",
+  Queued: "#F4D03F",
+  Approved: "#3498DB",
+  Declined: "#E74C3C",
+  Pushed: "#58D68D",
+};
+
 export default function Client({ id }) {
   const { user } = useUser();
   const { data, error, isLoading } = useGetClientByIdQuery({ id: id });
+  const router = useRouter();
   const [updateStatus, result] = useUpdateUserApprovalMutation();
   const details = useGetClientDetailsQuery({ id: id });
   const programs = useGetClientProgramInfoQuery({ id: id });
@@ -208,11 +217,11 @@ export default function Client({ id }) {
       });
   }
 
-  const router = useRouter();
-
   if (router.isFallback) return <Loading/>;
 
   if (isLoading || details.isLoading || programs.isLoading) return <Loading/>;
+
+  console.log(data)
 
   return (
     <Layout>
@@ -229,33 +238,51 @@ export default function Client({ id }) {
 
       <HStack justifyContent={"space-between"} my={2}>
         <HStack>
-          <Heading>{data.basicInfo.name}</Heading>
+          <VStack alignItems={"flex-start"}>
+            <Heading>{data.basicInfo.name}</Heading>
 
-          <Divider orientation={"vertical"}/>
+            <HStack>
+              <Tag
+                  size={"md"}
+                  variant={"solid"}
+                  backgroundColor={"#1C2833"}
+              >
+                {data.basicInfo.salesRep}
+              </Tag>
+              <Tag
+                  size={"md"}
+                  variant={"solid"}
+                  backgroundColor={statusColors[data.status.current]}
+              >
+                {data.status.current}
+              </Tag>
+            </HStack>
+          </VStack>
         </HStack>
 
-        <Menu>
-          <MenuButton
-            py={2}
-            transition="all 0.3s"
-            _focus={{ boxShadow: 'none' }}>
-            <IconButton
-              variant="outline"
-              aria-label="open menu"
-              icon={<FiMenu />}
-            />
-          </MenuButton>
-          <MenuList
-            bg={bgColor}
-            borderColor={borderColor}>
-            <MenuItem>Message Sales Rep.</MenuItem>
-            <Divider/>
-            <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(1)}>Approve</MenuItem>
-            <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(0)}>Decline</MenuItem>
-            <Divider/>
-            <MenuItem>Cancel</MenuItem>
-          </MenuList>
-        </Menu>
+        <HStack>
+          <Menu>
+            <MenuButton
+                transition="all 0.3s"
+                _focus={{ boxShadow: 'none' }}>
+              <IconButton
+                  variant="outline"
+                  aria-label="open menu"
+                  icon={<FiMenu />}
+              />
+            </MenuButton>
+            <MenuList
+                bg={bgColor}
+                borderColor={borderColor}>
+              <MenuItem>Message Sales Rep.</MenuItem>
+              <Divider/>
+              <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(1)}>Approve</MenuItem>
+              <MenuItem isDisabled={data.status.current !== "Queued"} onClick={() => handleStatusChange(0)}>Decline</MenuItem>
+              <Divider/>
+              <MenuItem>Cancel</MenuItem>
+            </MenuList>
+          </Menu>
+        </HStack>
       </HStack>
 
       <Divider/>

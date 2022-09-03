@@ -11,7 +11,7 @@ import {
   Input, Menu, MenuButton, MenuDivider, MenuList, MenuOptionGroup,
   Select,
   Table,
-  TableContainer,
+  TableContainer, Tag,
   Tbody,
   Td,
   Text,
@@ -24,6 +24,14 @@ import Loading from "../../components/loading";
 import {FiBarChart, FiChevronDown, FiFilter} from "react-icons/fi";
 import {TableFooter} from "semantic-ui-react";
 import _ from "lodash";
+
+const statusColors = {
+  Potential: "#1A5276",
+  Queued: "#F4D03F",
+  Approved: "#3498DB",
+  Declined: "#E74C3C",
+  Pushed: "#58D68D",
+};
 
 export default function Dashboard( )  {
   const { data, error, isLoading } = useGetClientsQuery();
@@ -184,7 +192,15 @@ export default function Dashboard( )  {
                   <Td>{item.name}</Td>
                   <Td>{item.territory}</Td>
                   <Td>{item.firstName} {item.lastName}</Td>
-                  <Td>{item.status}</Td>
+                  <Td>
+                    <Tag
+                        size={"md"}
+                        variant={"solid"}
+                        backgroundColor={statusColors[item.status]}
+                    >
+                      {item.status}
+                    </Tag>
+                  </Td>
                 </Tr>
               </Link>
             ))}
