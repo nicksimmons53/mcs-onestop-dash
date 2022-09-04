@@ -51,8 +51,6 @@ export default function Dashboard( )  {
     salesRep: { "Christina": false, "Natalia": false, "Kori": false, "Shelley": false, "Kimberly": false, "Casey": false }
   };
 
-  console.log(clients)
-
   React.useEffect(( ) => {
     if (data) {
       setClients(data.clients);

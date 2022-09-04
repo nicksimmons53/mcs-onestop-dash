@@ -33,7 +33,7 @@ import {
   MenuOptionGroup,
   Checkbox,
   Container,
-  MenuItem, TabPanel, TabPanels, Select, useToast, VStack, Tag
+  MenuItem, TabPanel, TabPanels, Select, useToast, VStack, Tag, Button
 } from "@chakra-ui/react";
 import {
   useGetClientAccountingDetailsQuery, useGetClientBillingPartsQuery,
@@ -43,6 +43,8 @@ import {
 import Loading from "../../components/loading";
 import Link from "next/link";
 import {FiBarChart, FiMenu} from "react-icons/fi";
+import s3 from "../../lib/s3";
+import { saveAs } from "file-saver";
 
 const tableHeaders = {
   addresses: [ "Type", "Street Address", "City", "State", "Zip" ],
@@ -176,6 +178,7 @@ const statusColors = {
 export default function Client({ id }) {
   const { user } = useUser();
   const { data, error, isLoading } = useGetClientByIdQuery({ id: id });
+  const [ files, setFiles ] = React.useState([]);
   const router = useRouter();
   const [updateStatus, result] = useUpdateUserApprovalMutation();
   const details = useGetClientDetailsQuery({ id: id });
@@ -192,6 +195,24 @@ export default function Client({ id }) {
     "Program Details",
     "Billing Parts",
   ];
+
+  React.useEffect(() => {
+    const getFiles = async() => {
+      setFiles(await s3.getFiles(
+          {
+            sageUserId: data.basicInfo.sageUserId,
+            sageEmployeeNumber: data.basicInfo.sageEmployeeNumber
+          },
+          data.basicInfo.name
+      ));
+    }
+
+    if (data) {
+      getFiles();
+    }
+  }, [data]);
+
+  console.log(files)
 
   const handleTabChange = index => {
     setActiveTab(tabs[index]);
@@ -220,8 +241,6 @@ export default function Client({ id }) {
   if (router.isFallback) return <Loading/>;
 
   if (isLoading || details.isLoading || programs.isLoading) return <Loading/>;
-
-  console.log(data)
 
   return (
     <Layout>
@@ -292,7 +311,7 @@ export default function Client({ id }) {
           {tabs.map(tab => <Tab key={tab}>{ tab }</Tab>)}
         </TabList>
 
-        { activeTab === "Basic Information" && <BasicInfo data={data} files={null}/> }
+        { activeTab === "Basic Information" && <BasicInfo data={data} files={files}/> }
         { activeTab === "Accounting Details" && <Details data={details.data.accounting} questions={questions.accounting}/> }
         { activeTab === "Expediting Details" && <Details data={details.data.expediting} questions={questions.expediting}/> }
         { activeTab === "Program Details" && <ProgramDetails data={programs.data} selections={data.selections}/> }
@@ -303,6 +322,19 @@ export default function Client({ id }) {
 }
 
 const BasicInfo = ({ data, files }) => {
+  const viewFile = async(row) => {
+    let fileUrl = await s3.viewObject(row);
+    fetch(fileUrl).then(function(t) {
+      return t.blob().then((b)=>{
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(b);
+            a.setAttribute("download", row.Name);
+            a.click();
+          }
+      );
+    });
+  }
+
   return (
     <>
       <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
@@ -394,9 +426,20 @@ const BasicInfo = ({ data, files }) => {
                 <Th>Name</Th>
                 <Th>Type</Th>
                 <Th>Size</Th>
+                <Th>Date Uploaded</Th>
+                <Th></Th>
               </Tr>
             </Thead>
             <Tbody>
+              {files.map((file, index) => (
+                  <Tr key={file.Key}>
+                    <Td>{file.Key.split("/")[1]}</Td>
+                    <Td>{file.Key.split(".")[1]}</Td>
+                    <Td>{(file.Size/1000000).toFixed(2)} MBs</Td>
+                    <Td>{file.LastModified}</Td>
+                    <Td><Button colorScheme={"blue"} onClick={() => viewFile(file)}>Download</Button></Td>
+                  </Tr>
+              ))}
             </Tbody>
           </Table>
         </TableContainer>
