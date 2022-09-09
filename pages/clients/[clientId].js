@@ -431,7 +431,13 @@ const BasicInfo = ({ data, files }) => {
               </Tr>
             </Thead>
             <Tbody>
-              {files.map((file, index) => (
+              { files === undefined &&
+                  <Tr>
+                    <Td>No Files Found</Td>
+                  </Tr>
+              }
+
+              {files !== undefined && files.map((file, index) => (
                   <Tr key={file.Key}>
                     <Td>{file.Key.split("/")[1]}</Td>
                     <Td>{file.Key.split(".")[1]}</Td>
