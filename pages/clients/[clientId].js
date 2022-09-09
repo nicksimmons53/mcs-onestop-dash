@@ -33,7 +33,7 @@ import {
   MenuOptionGroup,
   Checkbox,
   Container,
-  MenuItem, TabPanel, TabPanels, Select, useToast, VStack, Tag, Button
+  MenuItem, TabPanel, TabPanels, Select, useToast, VStack, Tag, Button, Center
 } from "@chakra-ui/react";
 import {
   useGetClientAccountingDetailsQuery, useGetClientBillingPartsQuery,
@@ -478,8 +478,17 @@ const BasicInfo = ({ data, files }) => {
 }
 
 const Details = ({ questions, data }) => {
-  let values = Object.values(data);
+  if (data === undefined) {
+    return (
+        <Center>
+          <Text style={{ color: "red" }}>
+            This is an error. Please contact system administration for help.
+          </Text>
+        </Center>
+    );
+  }
 
+  let values = Object.values(data);
   return (
     <>
       <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
