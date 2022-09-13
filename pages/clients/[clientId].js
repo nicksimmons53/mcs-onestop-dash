@@ -185,6 +185,8 @@ export default function Client({ id }) {
   const programs = useGetClientProgramInfoQuery({ id: id });
   const pricing = useGetClientBillingPartsQuery({ id: id });
   const [activeTab, setActiveTab] = React.useState("Basic Information");
+  const [ submittedAt, setSubmittedAt ] = React.useState("");
+
   const toast = useToast();
   const bgColor = useColorModeValue('white', 'gray.900');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -209,10 +211,9 @@ export default function Client({ id }) {
 
     if (data) {
       getFiles();
+      setSubmittedAt(new Date(data.approvals.lastSubmittedAt).toLocaleDateString("UTC", {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'}));
     }
   }, [data]);
-
-  console.log(files)
 
   const handleTabChange = index => {
     setActiveTab(tabs[index]);
@@ -275,6 +276,15 @@ export default function Client({ id }) {
               >
                 {data.status.current}
               </Tag>
+              { data.approvals.lastSubmittedAt && (
+                  <Tag
+                    size={"md"}
+                    variant={"solid"}
+                    backgroundColor={"#33C4F7"}
+                  >
+                    Last Submitted At: {submittedAt}
+                  </Tag>
+              )}
             </HStack>
           </VStack>
         </HStack>
@@ -337,6 +347,9 @@ const BasicInfo = ({ data, files }) => {
 
   return (
     <>
+      <HStack>
+
+      </HStack>
       <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
         <HStack justifyContent={"space-between"} p={3}>
           <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Addresses</Text>
@@ -366,6 +379,27 @@ const BasicInfo = ({ data, files }) => {
         </Table>
       </TableContainer>
 
+      <TableContainer borderWidth={"1px"} borderRadius={5}>
+        <HStack justifyContent={"space-between"} p={3}>
+          <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Programs</Text>
+        </HStack>
+        <Divider/>
+        <Table variant={"simple"}>
+          <Thead>
+            <Tr>
+              <Th>Selections</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {Object.keys(data.programs).filter(item => data.programs[item]).map(selection => (
+                <Tr key={selection}>
+                  <Td>{selection}</Td>
+                </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+
       <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
         <HStack justifyContent={"space-between"} p={3}>
           <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Contacts</Text>
@@ -386,7 +420,9 @@ const BasicInfo = ({ data, files }) => {
                 <Td>{item.name}</Td>
                 <Td>{item.title}</Td>
                 <Td>{item.phone}</Td>
-                <Td>{item.email}</Td>
+                <Link href={`mailto:${item.email}`}>
+                  <Td style={{ cursor: "pointer" }}>{item.email}</Td>
+                </Link>
               </Tr>
             ))}
           </Tbody>
@@ -394,27 +430,6 @@ const BasicInfo = ({ data, files }) => {
       </TableContainer>
 
       <HStack alignItems={"flex-start"} spacing={"10px"} m={5}>
-        <TableContainer borderWidth={"1px"} borderRadius={5}>
-          <HStack justifyContent={"space-between"} p={3}>
-            <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Programs</Text>
-          </HStack>
-          <Divider/>
-          <Table variant={"simple"}>
-            <Thead>
-              <Tr>
-                <Th>Selections</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {Object.keys(data.programs).filter(item => data.programs[item]).map(selection => (
-                <Tr key={selection}>
-                  <Td>{selection}</Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
-
         <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
           <HStack justifyContent={"space-between"} p={3}>
             <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Files</Text>
@@ -442,8 +457,8 @@ const BasicInfo = ({ data, files }) => {
                     <Td>{file.Key.split("/")[1]}</Td>
                     <Td>{file.Key.split(".")[1]}</Td>
                     <Td>{(file.Size/1000000).toFixed(2)} MBs</Td>
-                    <Td>{file.LastModified}</Td>
-                    <Td><Button colorScheme={"blue"} onClick={() => viewFile(file)}>Download</Button></Td>
+                    <Td>{new Date(file.LastModified).toLocaleDateString("UTC", {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })}</Td>
+                    <Td><Button colorScheme={"blue"} onClick={() => viewFile(file)} size={"sm"}>Download</Button></Td>
                   </Tr>
               ))}
             </Tbody>
@@ -463,7 +478,7 @@ const BasicInfo = ({ data, files }) => {
               </Tr>
             </Thead>
             <Tbody>
-              {Object.keys(data.approvals).map(manager => (
+              {Object.keys(data.approvals).filter(field => field !== "lastSubmittedAt").map(manager => (
                 <Tr key={manager}>
                   <Td>{manager}</Td>
                   <Td>{data.approvals[manager] === 1 ? "Approved" : data.approvals[manager] === 0 ? "Declined" : "No Response"}</Td>
