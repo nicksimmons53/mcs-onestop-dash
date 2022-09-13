@@ -347,9 +347,6 @@ const BasicInfo = ({ data, files }) => {
 
   return (
     <>
-      <HStack>
-
-      </HStack>
       <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
         <HStack justifyContent={"space-between"} p={3}>
           <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Addresses</Text>
@@ -374,27 +371,6 @@ const BasicInfo = ({ data, files }) => {
                 <Td>{item.state}</Td>
                 <Td>{item.zip}</Td>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-
-      <TableContainer borderWidth={"1px"} borderRadius={5}>
-        <HStack justifyContent={"space-between"} p={3}>
-          <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Programs</Text>
-        </HStack>
-        <Divider/>
-        <Table variant={"simple"}>
-          <Thead>
-            <Tr>
-              <Th>Selections</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {Object.keys(data.programs).filter(item => data.programs[item]).map(selection => (
-                <Tr key={selection}>
-                  <Td>{selection}</Td>
-                </Tr>
             ))}
           </Tbody>
         </Table>
@@ -429,7 +405,7 @@ const BasicInfo = ({ data, files }) => {
         </Table>
       </TableContainer>
 
-      <HStack alignItems={"flex-start"} spacing={"10px"} m={5}>
+      {/*<HStack alignItems={"flex-start"}>*/}
         <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
           <HStack justifyContent={"space-between"} p={3}>
             <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Files</Text>
@@ -467,6 +443,27 @@ const BasicInfo = ({ data, files }) => {
 
         <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
           <HStack justifyContent={"space-between"} p={3}>
+            <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Programs</Text>
+          </HStack>
+          <Divider/>
+          <Table variant={"simple"}>
+            <Thead>
+              <Tr>
+                <Th>Selections</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {Object.keys(data.programs).filter(item => data.programs[item]).map(selection => (
+                  <Tr key={selection}>
+                    <Td>{selection}</Td>
+                  </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+
+        <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
+          <HStack justifyContent={"space-between"} p={3}>
             <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Approvals</Text>
           </HStack>
           <Divider/>
@@ -487,7 +484,7 @@ const BasicInfo = ({ data, files }) => {
             </Tbody>
           </Table>
         </TableContainer>
-      </HStack>
+      {/*</HStack>*/}
     </>
   );
 }
