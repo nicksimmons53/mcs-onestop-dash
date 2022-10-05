@@ -3,12 +3,13 @@ import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/layout";
 import {
-  border,
+  Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel,
+  border, Box,
   Button, Checkbox, CheckboxGroup,
   Divider,
   HStack,
   IconButton,
-  Input, Menu, MenuButton, MenuDivider, MenuList, MenuOptionGroup,
+  Input, Menu, MenuButton, MenuDivider, MenuGroup, MenuList, MenuOptionGroup,
   Select,
   Table,
   TableContainer, Tag,
@@ -43,13 +44,9 @@ export default function Dashboard( )  {
   const [start, setStart] = React.useState(0);
   const [end, setEnd] = React.useState(10);
   let sorts = { name: false, firstName: false, territory: false, status: false };
+  const [filters, setFilters] = React.useState({ status: [], territory: [], salesRep: [] });
   const bgColor = useColorModeValue('white', 'gray.900');
   const borderColor = useColorModeValue('gray.300', 'gray.700');
-  let filters = {
-    status: { "Potential": false, "Queued": false, "Declined": false, "Approved": false },
-    territory: { "Austin": false, "Dallas": false, "Houston": false, "San Antonio": false },
-    salesRep: { "Christina": false, "Natalia": false, "Kori": false, "Shelley": false, "Kimberly": false, "Casey": false }
-  };
 
   React.useEffect(( ) => {
     if (data) {
@@ -83,7 +80,7 @@ export default function Dashboard( )  {
   }
 
   const ClientsPerPage = () => (
-    <Select placeholder={"Clients per Page"} value={clientsPerPage} onChange={handleChange}>
+    <Select placeholder={"Clients per Page"} value={clientsPerPage} onChange={handleChange} minW={75}>
       <option value={10}>10</option>
       <option value={20}>20</option>
       <option value={50}>50</option>
@@ -122,101 +119,245 @@ export default function Dashboard( )  {
     }
   }
 
+  const handleFilter = (event, arr) => {
+    if (event.target.checked) {
+      let filteredClients = [];
+      let newArr = [...filters[arr], event.target.value];
+      setFilters(state => ({...state, [arr]: [...newArr]}));
+      newArr.forEach(filter => {
+        data.clients.forEach(client => {
+          if (client.status === filter) {
+            filteredClients.push(client);
+          }
+
+          if (client.territory === filter) {
+            filteredClients.push(client);
+          }
+
+          if (`${client.firstName} ${client.lastName}` === filter) {
+            filteredClients.push(client);
+          }
+        })
+      });
+
+      setNumOfPages(Math.ceil(filteredClients.length/clientsPerPage));
+      setClients(filteredClients);
+    } else if (!event.target.checked) {
+      let filteredClients = data.clients;
+      let newArr = _.remove(filters[arr], event.target.value);
+      setFilters(state => ({...state, [arr]: [...newArr] }));
+
+      newArr.forEach(filter => {
+        data.clients.forEach(client => {
+          if (client.status === filter) {
+            filteredClients.push(client);
+          }
+
+          if (client?.territory === filter) {
+            filteredClients.push(client);
+          }
+
+          if (`${client.firstName} ${client.lastName}` === filter) {
+            filteredClients.push(client);
+          }
+        })
+      });
+
+      setNumOfPages(Math.ceil(filteredClients.length/clientsPerPage));
+      setClients(filteredClients);
+    }
+  }
+
   return (
-    <Layout>
-      <Head>
-        <title>MCS | Clients</title>
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-        <link rel="manifest" href="/site.webmanifest"/>
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000"/>
-        <meta name="msapplication-TileColor" content="#cad3d5"/>
-        <meta name="theme-color" content="#ffffff"/>
-      </Head>
+      <Layout>
+        <Head>
+          <title>MCS | Clients</title>
+          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+          <link rel="manifest" href="/site.webmanifest"/>
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000"/>
+          <meta name="msapplication-TileColor" content="#cad3d5"/>
+          <meta name="theme-color" content="#ffffff"/>
+        </Head>
 
-      <TableContainer borderWidth={"1px"} borderRadius={5} borderColor={borderColor}>
-        <HStack justifyContent={"space-between"} p={3}>
-          <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Clients</Text>
-          <HStack flex={1}>
-            <Menu>
-              <MenuButton
-                py={2}
-                transition="all 0.3s"
-                _focus={{ boxShadow: 'none' }}>
-                <IconButton
-                  variant="outline"
-                  aria-label="open menu"
-                  icon={<FiBarChart />}
-                />
-              </MenuButton>
-              <MenuList
-                bg={bgColor}
-                borderColor={borderColor}>
-                <CheckboxGroup>
-                  <MenuOptionGroup title={"Sort"}>
-                    <Checkbox p={2} onChange={e => handleSort(e)} value={"name"}>by Client Name</Checkbox>
-                  </MenuOptionGroup>
-                  <MenuOptionGroup>
-                    <Checkbox p={2} onChange={e => handleSort(e)} value={"territory"}>by Territory</Checkbox>
-                  </MenuOptionGroup>
-                  <MenuOptionGroup>
-                    <Checkbox p={2} onChange={e => handleSort(e)} value={"firstName"}>by Sales Rep.</Checkbox>
-                  </MenuOptionGroup>
-                  <MenuOptionGroup>
-                    <Checkbox p={2} onChange={e => handleSort(e)} value={"status"}>by Status</Checkbox>
-                  </MenuOptionGroup>
-                </CheckboxGroup>
-              </MenuList>
-            </Menu>
-            <ClientsPerPage/>
-            <Input placeholder={"Search Clients"} onChange={handleInput}/>
+        <TableContainer borderWidth={"1px"} borderRadius={5} borderColor={borderColor}>
+          <HStack justifyContent={"space-between"} p={3}>
+            <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Clients</Text>
+            <HStack flex={1}>
+              <Menu>
+                <MenuButton
+                    py={2}
+                    transition="all 0.3s"
+                    _focus={{boxShadow: 'none'}}>
+                  <IconButton
+                      variant="outline"
+                      aria-label="open menu"
+                      icon={<FiBarChart/>}
+                  />
+                </MenuButton>
+                <MenuList
+                    bg={bgColor}
+                    borderColor={borderColor}>
+                  <CheckboxGroup>
+                    <MenuOptionGroup title={"Sort"}>
+                      <Checkbox p={2} onChange={e => handleSort(e)} value={"name"}>by Client Name</Checkbox>
+                    </MenuOptionGroup>
+                    <MenuOptionGroup>
+                      <Checkbox p={2} onChange={e => handleSort(e)} value={"territory"}>by Territory</Checkbox>
+                    </MenuOptionGroup>
+                    <MenuOptionGroup>
+                      <Checkbox p={2} onChange={e => handleSort(e)} value={"firstName"}>by Sales Rep.</Checkbox>
+                    </MenuOptionGroup>
+                    <MenuOptionGroup>
+                      <Checkbox p={2} onChange={e => handleSort(e)} value={"status"}>by Status</Checkbox>
+                    </MenuOptionGroup>
+                  </CheckboxGroup>
+                </MenuList>
+              </Menu>
+
+              <Menu>
+                <MenuButton
+                    py={2}
+                    transition="all 0.3s"
+                    _focus={{boxShadow: 'none'}}>
+                  <IconButton
+                      variant="outline"
+                      aria-label="open menu"
+                      icon={<FiFilter/>}
+                  />
+                </MenuButton>
+                <MenuList
+                    bg={bgColor}
+                    borderColor={borderColor}>
+                  <MenuGroup>
+                    <Accordion allowToggle>
+                      <AccordionItem>
+                        <AccordionButton>
+                          <Box flex={1} textAlign={"left"}>by Status</Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel>
+                          <CheckboxGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "status")} value={"Approved"}>Approved</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "status")} value={"Declined"}>Declined</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "status")} value={"Potential"}>Potential</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "status")} value={"Pushed"}>Pushed</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "status")} value={"Queued"}>Queued</Checkbox>
+                            </MenuOptionGroup>
+                          </CheckboxGroup>
+                        </AccordionPanel>
+                      </AccordionItem>
+
+                      <AccordionItem>
+                        <AccordionButton>
+                          <Box flex={1} textAlign={"left"}>by Territory</Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel>
+                          <CheckboxGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "city")} value={"Austin"}>Austin</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "city")} value={"Dallas"}>Dallas</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "city")} value={"Houston"}>Houston</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "city")} value={"San Antonio"}>San Antonio</Checkbox>
+                            </MenuOptionGroup>
+                          </CheckboxGroup>
+                        </AccordionPanel>
+                      </AccordionItem>
+
+                      <AccordionItem>
+                        <AccordionButton>
+                          <Box flex={1} textAlign={"left"}>by Sales Rep.</Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel>
+                          <CheckboxGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "salesRep")} value={"Casey Nelson"}>Casey Nelson</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "salesRep")} value={"Christina Mizell"}>Christina Mizell</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "salesRep")} value={"Kimberly Roberts"}>Kimberly Roberts</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "salesRep")} value={"Natalia Bulox"}>Natalia Bulox</Checkbox>
+                            </MenuOptionGroup>
+                            <MenuOptionGroup>
+                              <Checkbox p={2} onChange={e => handleFilter(e, "salesRep")} value={"Shelly Morrison"}>Shelly Morrison</Checkbox>
+                            </MenuOptionGroup>
+                          </CheckboxGroup>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    </Accordion>
+                  </MenuGroup>
+                </MenuList>
+              </Menu>
+              <ClientsPerPage/>
+              <Input placeholder={"Search Clients"} onChange={handleInput} minW={150}/>
+            </HStack>
           </HStack>
-        </HStack>
-        <Divider color={borderColor}/>
-        <Table variant={"simple"}>
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Territory</Th>
-              <Th>Sales Rep.</Th>
-              <Th>Status</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {clients.slice(start, end).map(item => (
-              <Link href={`/clients/${item.clientId}`} key={item.clientId}>
-                <Tr _hover={{ cursor: "pointer" }}>
-                  <Td>{item.name}</Td>
-                  <Td>{item.territory}</Td>
-                  <Td>{item.firstName} {item.lastName}</Td>
-                  <Td>
-                    <Tag
-                        size={"md"}
-                        variant={"solid"}
-                        backgroundColor={statusColors[item.status]}
-                    >
-                      {item.status}
-                    </Tag>
-                  </Td>
-                </Tr>
-              </Link>
-            ))}
-          </Tbody>
-          <TableFooter>
-            <Tr>
-              <Td/>
-              <Td/>
-              <Td/>
-              <Td>Total # of Clients: {clients.length}</Td>
-            </Tr>
-          </TableFooter>
-        </Table>
+          <Divider color={borderColor}/>
+          <Table variant={"simple"}>
+            <Thead>
+              <Tr>
+                <Th>Name</Th>
+                <Th>Territory</Th>
+                <Th>Sales Rep.</Th>
+                <Th>Status</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {clients.slice(start, end).map(item => (
+                  <Link href={`/clients/${item.clientId}`} key={item.clientId}>
+                    <Tr _hover={{cursor: "pointer"}}>
+                      <Td>{item.name}</Td>
+                      <Td>{item.territory}</Td>
+                      <Td>{item.firstName} {item.lastName}</Td>
+                      <Td>
+                        <Tag
+                            size={"md"}
+                            variant={"solid"}
+                            backgroundColor={statusColors[item.status]}
+                        >
+                          {item.status}
+                        </Tag>
+                      </Td>
+                    </Tr>
+                  </Link>
+              ))}
+            </Tbody>
+            <TableFooter>
+              <Tr>
+                <Td/>
+                <Td/>
+                <Td/>
+                <Td>Total # of Clients: {clients.length}</Td>
+              </Tr>
+            </TableFooter>
+          </Table>
 
-        <HStack justifyContent={"center"} p={3}>
-          <Pagination/>
-        </HStack>
-      </TableContainer>
-    </Layout>
-  )
+          <HStack justifyContent={"center"} p={3}>
+            <Pagination/>
+          </HStack>
+        </TableContainer>
+      </Layout>
+  );
 }

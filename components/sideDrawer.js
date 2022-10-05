@@ -29,6 +29,7 @@ import {
     FiBell,
     FiChevronDown,
     FiUsers,
+    FiUserPlus,
     FiList,
     FiEdit3,
 } from 'react-icons/fi';
@@ -41,6 +42,7 @@ import Image from "next/future/image";
 const LinkItems = [
     { name: 'Home', icon: FiHome, path: "/" },
     { name: 'Clients', icon: FiUsers, path: "/clients/dashboard" },
+    // { name: "Employees", icon: FiUserPlus, path: "/employees/add-user" },
     // { name: 'Employees', icon: FiList, path: "/" },
     // { name: 'Favourites', icon: FiStar },
     { name: 'IT Request', icon: FiEdit3, path: "/help/it-request" },
@@ -115,7 +117,7 @@ const NavItem = ({ icon, children, path, ...rest }) => {
       <Flex
         align="center"
         color={"white"}
-        p="4"
+        p="2"
         mt={"2"}
         mx="4"
         borderRadius="lg"

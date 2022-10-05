@@ -26,7 +26,7 @@ export default function Home() {
         <meta name="theme-color" content="#ffffff"/>
       </Head>
 
-      <SimpleGrid columns={[2, 2, 4]} minChildWidth={200} spacing={"20px"}>
+      <SimpleGrid minChildWidth={200} spacing={"10px"}>
         <Box borderRadius={5} p={5} shadow='md' borderWidth='1px'>
           <Heading size={"lg"}>Clients</Heading>
           <Divider/>
@@ -38,7 +38,7 @@ export default function Home() {
         {/*<Box borderRadius={5} p={5} shadow='md' borderWidth='1px'>*/}
         {/*  <Heading size={"lg"}>Employees</Heading>*/}
         {/*  <Divider/>*/}
-        {/*  <Link href={"/clients/dashboard"}>*/}
+        {/*  <Link href={"/employees/add-user"}>*/}
         {/*    <Button colorScheme={"blue"} mt={5} width={"100%"}>View</Button>*/}
         {/*  </Link>*/}
         {/*</Box>*/}
