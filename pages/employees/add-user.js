@@ -1,39 +1,46 @@
 import React from "react";
 import Head from "next/head";
 import Layout from "../../components/layout";
-import {Heading, Input, Select} from "@chakra-ui/react";
+import { Divider, Heading, Input, Select } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import TabHeader from "../../components/tabHeader";
 
 export default function AddUser( )  {
     return (
         <Layout>
-            <Head>
-                <title>MCS | Add User</title>
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-                <link rel="manifest" href="/site.webmanifest"/>
-                <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000"/>
-                <meta name="msapplication-TileColor" content="#cad3d5"/>
-                <meta name="theme-color" content="#ffffff"/>
-            </Head>
+            <TabHeader title={"Add User"} />
 
             <Heading as={"h3"}>Add Employee</Heading>
-            <Input placeholder={"First Name"} />
-            <Input placeholder={"Middle Initial"} />
-            <Input placeholder={"Last Name"} />
-            <Input placeholder={"Phone Number"} />
-            <Select placeholder={"Branch"}>
+
+            <Divider />
+
+            <Input placeholder={"First Name"} my={2} />
+            <Input placeholder={"Middle Initial"} my={2} />
+            <Input placeholder={"Last Name"} my={2} />
+            <Input placeholder={"Phone Number"} my={2} />
+            <Select placeholder={"Branch"} mt={2}>
                 <option value={"Austin"}>Austin</option>
                 <option value={"Dallas"}>Dallas</option>
                 <option value={"Houston"}>Houston</option>
                 <option value={"San Antonio"}>San Antonio</option>
             </Select>
-            <Select placeholder={"Department"}>
+            <Select placeholder={"Department"} my={4}>
                 <option value={"Expediting"}>Expediting</option>
                 <option value={"Field"}>Field</option>
                 <option value={"Sales"}>Sales</option>
                 <option value={"Warranty"}>Warranty</option>
             </Select>
+            <Select placeholder={"Sub-Department"} my={4}>
+                <option value={"Expediting"}>Expediting</option>
+                <option value={"Field"}>Field</option>
+                <option value={"Sales"}>Sales</option>
+                <option value={"Warranty"}>Warranty</option>
+            </Select>
+            <Select placeholder={"Administrator?"} my={4}>
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+            </Select>
+            <Input placeholder={"Sage Employee Number"} mb={2} />
         </Layout>
     )
 }
