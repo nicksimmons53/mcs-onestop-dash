@@ -45,6 +45,7 @@ const linkItems = [
     {name: "Employees", icon: FiUserPlus, path: "/employees/add-user"},
     // { name: "Employees", icon: FiList, path: "/" },
     // { name: "Favourites", icon: FiStar },
+    {name: "Newsletters", icon: FiEdit3, path: "/"},
     {name: "IT Request", icon: FiEdit3, path: "/help/it-request"},
     // { name: "Settings", icon: FiSettings, path: "" },
 ];

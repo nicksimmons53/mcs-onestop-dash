@@ -163,9 +163,9 @@ export default function Client({id}) {
                             borderColor={borderColor}>
                             <MenuItem>Message Sales Rep.</MenuItem>
                             <Divider/>
-                            <MenuItem isDisabled={data.status.current !== "Queued"}
+                            <MenuItem isDisabled={data.status.current !== "Queued" && data.status.current !== "Potential"}
                                       onClick={() => handleStatusChange(1)}>Approve</MenuItem>
-                            <MenuItem isDisabled={data.status.current !== "Queued"}
+                            <MenuItem isDisabled={data.status.current !== "Queued" && data.status.current !== "Potential"}
                                       onClick={() => handleStatusChange(0)}>Decline</MenuItem>
                             <Divider/>
                             <MenuItem>Cancel</MenuItem>

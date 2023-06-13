@@ -39,6 +39,7 @@ import { FiBarChart, FiFilter } from "react-icons/fi";
 import { TableFooter } from "semantic-ui-react";
 import _ from "lodash";
 import TabHeader from "../../components/tabHeader";
+import ItemsPerPage from "../../components/itemsPerPage";
 
 const statusColors = {
     Potential: "#1A5276",
@@ -74,7 +75,6 @@ export default function Dashboard() {
     const handleChange = (event) => {
         setStart(0);
         setEnd(event.target.value);
-        ;
         setClientsPerPage(event.target.value)
         setNumOfPages(Math.ceil(clients.length / event.target.value));
     }
@@ -93,15 +93,6 @@ export default function Dashboard() {
         setEnd(clientsPerPage);
         setNumOfPages(Math.ceil(tempClients.length / clientsPerPage));
     }
-
-    const ClientsPerPage = () => (
-        <Select placeholder={"Clients per Page"} value={clientsPerPage} onChange={handleChange} minW={75}>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-        </Select>
-    );
 
     const Pagination = () => {
         const onChange = (index) => {
@@ -334,7 +325,9 @@ export default function Dashboard() {
                                 </MenuGroup>
                             </MenuList>
                         </Menu>
-                        <ClientsPerPage/>
+
+                        <ItemsPerPage placeholder={"Clients per Page"} value={clientsPerPage} options={[10, 20, 50, 100]} onChange={handleChange} />
+                        {/*<ClientsPerPage/>*/}
                         <Input placeholder={"Search Clients"} onChange={handleInput} minW={150}/>
                     </HStack>
                 </HStack>
