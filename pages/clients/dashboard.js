@@ -40,6 +40,7 @@ import { TableFooter } from "semantic-ui-react";
 import _ from "lodash";
 import TabHeader from "../../components/tabHeader";
 import ItemsPerPage from "../../components/itemsPerPage";
+import {ArrowRightIcon, ExternalLinkIcon} from "@chakra-ui/icons";
 
 const statusColors = {
     Potential: "#1A5276",
@@ -339,26 +340,30 @@ export default function Dashboard() {
                             <Th>Territory</Th>
                             <Th>Sales Rep.</Th>
                             <Th>Status</Th>
+                            <Th></Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {clients.slice(start, end).map(item => (
-                            <Link href={`/clients/${item.clientId}`} key={item.clientId}>
-                                <Tr _hover={{cursor: "pointer"}}>
-                                    <Td>{item.name}</Td>
-                                    <Td>{item.territory}</Td>
-                                    <Td>{item.firstName} {item.lastName}</Td>
-                                    <Td>
-                                        <Tag
-                                            size={"md"}
-                                            variant={"solid"}
-                                            backgroundColor={statusColors[item.status]}
-                                        >
-                                            {item.status}
-                                        </Tag>
-                                    </Td>
-                                </Tr>
-                            </Link>
+                            <Tr _hover={{cursor: "pointer"}} key={item.clientId}>
+                                <Td>{item.name}</Td>
+                                <Td>{item.territory}</Td>
+                                <Td>{item.firstName} {item.lastName}</Td>
+                                <Td>
+                                    <Tag
+                                        size={"md"}
+                                        variant={"solid"}
+                                        backgroundColor={statusColors[item.status]}
+                                    >
+                                        {item.status}
+                                    </Tag>
+                                </Td>
+                                <Td>
+                                    <Link href={`/clients/${item.clientId}`}>
+                                        <IconButton aria-label={"Client Actions"} icon={<ArrowRightIcon/>} variant={"ghost"}/>
+                                    </Link>
+                                </Td>
+                            </Tr>
                         ))}
                     </Tbody>
                     <TableFooter>

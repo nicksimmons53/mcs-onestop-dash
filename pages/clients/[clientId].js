@@ -32,9 +32,8 @@ import Loading from "../../components/loading";
 import { FiMenu } from "react-icons/fi";
 import s3 from "../../lib/s3";
 import { useSelector } from "react-redux";
-import { questions, statusColors, tableHeaders } from "./lib/constants";
-import Table from "./components/customTable";
-import CustomTable from "./components/customTable";
+import { questions, statusColors, tableHeaders } from "../../src/lib/constants";
+import CustomTable from "../../components/clients/customTable";
 
 export default function Client({id}) {
     const user = useSelector(state => state.user);

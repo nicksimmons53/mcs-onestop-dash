@@ -12,11 +12,6 @@ module.exports = {
     SESSION_COOKIE_LIFETIME: 10
   },
   images: {
-    domains: ["s.gravatar.com"],
-  },
-  experimental: {
-    images: {
-      allowFutureImage: true,
-    },
-  },
+    domains: ["s.gravatar.com"]
+  }
 }

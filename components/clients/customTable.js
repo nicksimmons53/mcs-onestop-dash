@@ -24,7 +24,7 @@ export default function CustomTable({title, headerRow, data, key, cellKeys, drop
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {data && data !== undefined && data.map((item, index) => (
+                    {data && true && data.map((item, index) => (
                         <Tr key={key}>
                             {Object.keys(item).map(cell => (
                                 <Td key={item}>{item[cell]}</Td>

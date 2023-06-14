@@ -37,15 +37,15 @@ import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useUser } from "@auth0/nextjs-auth0";
 import Loading from "./loading";
 import icon from "../public/icon.png";
-import Image from "next/future/image";
+import Image from "next/image";
 
 const linkItems = [
     {name: "Home", icon: FiHome, path: "/"},
     {name: "Clients", icon: FiUsers, path: "/clients/dashboard"},
-    {name: "Employees", icon: FiUserPlus, path: "/employees/add-user"},
+    // {name: "Employees", icon: FiUserPlus, path: "/employees/add-user"},
     // { name: "Employees", icon: FiList, path: "/" },
     // { name: "Favourites", icon: FiStar },
-    {name: "Newsletters", icon: FiEdit3, path: "/"},
+    // {name: "Newsletters", icon: FiEdit3, path: "/"},
     {name: "IT Request", icon: FiEdit3, path: "/help/it-request"},
     // { name: "Settings", icon: FiSettings, path: "" },
 ];
@@ -97,7 +97,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
             {...rest}>
             <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
                 <Image src={icon} width={40} height={40} style={{borderRadius: 5}}/>
-                <Text fontSize="2xl" fontWeight="bold" color={"white"}>
+                <Text fontSize="2xl" fontWeight="bold" color={"white"} alt={"MC Surfaces, Inc. Logo"}>
                     OneStop
                 </Text>
                 <CloseButton color={"white"} display={{base: "flex", md: "none"}} onClick={onClose}/>
