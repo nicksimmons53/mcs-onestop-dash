@@ -1,7 +1,7 @@
 import {Button, HStack} from "@chakra-ui/react";
 import React from "react";
 
-export default function Pagination ({ numOfPages, activePage }) {
+export default function Pagination ({ numOfPages }) {
     const [ activePage, setActivePage ] = React.useState(0);
     const [start, setStart] = React.useState(0);
     const [end, setEnd] = React.useState(10);
