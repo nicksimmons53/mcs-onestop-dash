@@ -123,7 +123,7 @@ const SidebarContent = ({ setPath, onClose, ...rest }) => {
       h="full"
       {...rest}>
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Image src={icon} width={40} height={40} style={{borderRadius: 5}}/>
+        <Image src={icon} width={40} height={40} style={{borderRadius: 5}} alt={"MC Surfaces Inc. Logo"}/>
         <Text fontSize="2xl" fontWeight="bold" color={"white"} alt={"MC Surfaces, Inc. Logo"}>
           OneStop
         </Text>
