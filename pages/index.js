@@ -50,7 +50,7 @@ export default function Home() {
                 <Box borderRadius={5} p={5} shadow='md' borderWidth='1px'>
                     <Heading size={"lg"}>Clients</Heading>
                     <Divider/>
-                    <Link href={"/clients/dashboard"}>
+                    <Link href={"/clients/onboard/dashboard"}>
                         <Button colorScheme={"blue"} mt={5} width={"100%"}>View</Button>
                     </Link>
                 </Box>

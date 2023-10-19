@@ -3,7 +3,10 @@ import { emptySplitApi } from "./emptySplitApi";
 const clientApi = emptySplitApi.injectEndpoints({
     endpoints: (build) => ({
         getClients: build.query({
-            query: () => `/clients`,
+            query: () => `/clients/onboard`,
+        }),
+        getOnboardClients: build.query({
+            query: () => `/clients/sage`,
         }),
         getClientById: build.query({
             query: ({id}) => `/clients/${id}/profile-data`,
@@ -32,6 +35,7 @@ const clientApi = emptySplitApi.injectEndpoints({
 
 export const {
     useGetClientsQuery,
+    useGetOnboardClientsQuery,
     useGetClientByIdQuery,
     useGetClientDetailsQuery,
     useGetClientProgramInfoQuery,

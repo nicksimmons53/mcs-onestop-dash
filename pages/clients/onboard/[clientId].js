@@ -1,8 +1,8 @@
 import React from "react";
 import _ from "lodash";
-import Layout from "../../components/layout";
+import Layout from "../../../components/layout";
 import { useRouter } from 'next/router';
-import TabHeader from "../../components/tabHeader";
+import TabHeader from "../../../components/tabHeader";
 import {
     Button,
     Divider,
@@ -27,13 +27,13 @@ import {
     useGetClientDetailsQuery,
     useGetClientProgramInfoQuery,
     useUpdateUserApprovalMutation,
-} from "../../src/services/client";
-import Loading from "../../components/loading";
+} from "../../../src/services/client";
+import Loading from "../../../components/loading";
 import { FiMenu } from "react-icons/fi";
-import s3 from "../../lib/s3";
+import s3 from "../../../lib/s3";
 import { useSelector } from "react-redux";
-import { questions, statusColors, tableHeaders } from "../../src/lib/constants";
-import CustomTable from "../../components/clients/customTable";
+import { questions, statusColors, tableHeaders } from "../../../src/lib/constants";
+import CustomTable from "../../../components/clients/customTable";
 
 export default function Client({id}) {
     const user = useSelector(state => state.user);
@@ -227,7 +227,7 @@ const BasicInfo = ({data, files}) => {
 
             <CustomTable
                 title={"Files"}
-                headerRow={["Name", "Type", "Size", "Date Uploaded"]}
+                headerRow={["Name", "Type", "Size", "Date Uploaded", ""]}
                 data={files !== undefined && files.map((file, index) => ({
                     name: file.Key.split("/")[1],
                     type: file.Key.split(".")[1],
@@ -382,7 +382,7 @@ const PricingBreakdown = ({data}) => {
 }
 
 export async function getStaticPaths() {
-    const res = await fetch("https://onboard.mcsurfacesinc.com/admin/clients");
+    const res = await fetch("https://onboard.mcsurfacesinc.com/admin/clients/onboard");
     const data = await res.json();
 
     const paths = data.clients.map((item) => ({
