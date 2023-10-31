@@ -66,7 +66,7 @@ export default function Dashboard() {
 
   React.useEffect(() => {
     if (data) {
-      let clientList = data.clients.filter(client => client.status !== "Pushed");
+      let clientList = data.clients;
       setClients(clientList);
       setNumOfPages(Math.ceil(clientList.length / clientsPerPage));
     }
