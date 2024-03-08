@@ -35,12 +35,14 @@ import {
 } from "@chakra-ui/react";
 import {useGetClientsQuery, useGetOnboardClientsQuery} from "../../../src/services/client";
 import Loading from "../../../components/loading";
-import { FiBarChart, FiFilter } from "react-icons/fi";
+import {FiBarChart, FiFilter, FiUserPlus} from "react-icons/fi";
 import { TableFooter } from "semantic-ui-react";
 import _ from "lodash";
 import TabHeader from "../../../components/tabHeader";
 import ItemsPerPage from "../../../components/itemsPerPage";
 import {ArrowRightIcon, ExternalLinkIcon} from "@chakra-ui/icons";
+import AddClient from "./components/addClient";
+import {Montserrat} from "next/font/google";
 
 const statusColors = {
   Potential: "#1A5276",
@@ -49,6 +51,7 @@ const statusColors = {
   Declined: "#E74C3C",
   Pushed: "#58D68D",
 };
+const montserrat = Montserrat({ subsets: ['latin'] });
 
 export default function Dashboard() {
   const {data, error, isLoading} = useGetClientsQuery();
@@ -182,8 +185,17 @@ export default function Dashboard() {
 
       <TableContainer borderWidth={"1px"} borderRadius={5} borderColor={borderColor}>
         <HStack justifyContent={"space-between"} p={3}>
-          <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Clients</Text>
+          <Text flex={2} fontSize={"lg"} fontWeight={"bold"} className={montserrat.className}>Clients</Text>
           <HStack flex={1}>
+            {/*<IconButton*/}
+            {/*  variant="outline"*/}
+            {/*  aria-label="add client"*/}
+            {/*  icon={<FiUserPlus/>}*/}
+            {/*  onClick={onOpen}*/}
+            {/*/>*/}
+
+            {/*{isOpen && <AddClient isOpen={isOpen} onClose={onClose} />}*/}
+
             <Menu>
               <MenuButton
                 py={2}

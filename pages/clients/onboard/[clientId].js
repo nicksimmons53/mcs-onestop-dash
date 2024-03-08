@@ -85,6 +85,8 @@ export default function Client({id}) {
         setActiveTab(tabs[index]);
     }
 
+    console.log(user);
+
     const handleStatusChange = (decision) => {
         updateStatus({
             id: id,

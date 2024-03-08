@@ -2335,6 +2335,11 @@
     "@babel/runtime" "^7.10.4"
     react-is "^16.6.3"
 
+"@fontsource/montserrat@^5.0.16":
+  version "5.0.16"
+  resolved "https://registry.yarnpkg.com/@fontsource/montserrat/-/montserrat-5.0.16.tgz#caa1b11b1d0ee1d6a028a73cedb5b27f8d881242"
+  integrity sha512-g27g1cvkyVm74QM0HKOCnI4iifMqf/3cSJYedjbjtW/Ygb271qfDz5gGMJCl9MinD4nimDdENsU3K1vGR50S2Q==
+
 "@grpc/grpc-js@^1.3.2":
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.7.1.tgz#cfac092e61eac6fe0f80d22943f98e1ba45f02a2"
@@ -5037,6 +5042,11 @@ react-focus-lock@^2.9.1:
     react-clientside-effect "^1.2.6"
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
+
+react-hook-form@^7.49.2:
+  version "7.49.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.49.2.tgz#6fb2742e1308020f26cb1915c7012b6c07b11ade"
+  integrity sha512-TZcnSc17+LPPVpMRIDNVITY6w20deMdNi6iehTFLV1x8SqThXGwu93HjlUVU09pzFgZH7qZOvLMM7UYf2ShAHA==
 
 react-icons@^4.4.0:
   version "4.4.0"
