@@ -29,6 +29,9 @@ import {
 import {FiChevronDown, FiChevronUp, FiPlus, FiUploadCloud, FiX} from "react-icons/fi";
 import {useFieldArray, useForm} from "react-hook-form";
 import {useSelector} from "react-redux";
+import {useGetOnboardUserByIdQuery} from "../../../../src/services/onboardUser";
+import {useUser} from "@auth0/nextjs-auth0";
+import s3 from "../../../../lib/s3";
 
 // TODO: add alert to cancel function
 // TODO: readd required variable
@@ -48,7 +51,8 @@ export default function AddClient({ isOpen, onClose }) {
   const contactsDisc = useDisclosure();
   const [files, setFiles] = React.useState([]);
   const fileRef = useRef();
-  const userInfo = useSelector(state => state.user.info);
+  const { user, isLoading, error } = useUser();
+  const onboardUser = useGetOnboardUserByIdQuery({ sub: user.sub });
 
   const handleFileButtonClick = (e) => {
     fileRef.current.click();
@@ -64,10 +68,14 @@ export default function AddClient({ isOpen, onClose }) {
   }
 
   const onSubmit = (data) => {
-    // let filePath = `/${data.clientName}/${files[0].name}`;
-    console.log(userInfo);
-    console.log(data);
-    console.log(files);
+    let userInfo = onboardUser.data;
+    // let filePath = `mcs-onboard-${userInfo.email.split("@")[0]}-${userInfo.sageEmployeeNumber}/${data.clientName}/`;
+    // console.log(filePath)
+    console.log(userInfo)
+    let response = s3.createBucket(`${userInfo.sageUserId}-${userInfo.sageEmployeeNumber}`);
+    console.log(response);
+    // console.log(data);
+    // console.log(files);
   }
 
   return (

@@ -187,14 +187,14 @@ export default function Dashboard() {
         <HStack justifyContent={"space-between"} p={3}>
           <Text flex={2} fontSize={"lg"} fontWeight={"bold"} className={montserrat.className}>Clients</Text>
           <HStack flex={1}>
-            {/*<IconButton*/}
-            {/*  variant="outline"*/}
-            {/*  aria-label="add client"*/}
-            {/*  icon={<FiUserPlus/>}*/}
-            {/*  onClick={onOpen}*/}
-            {/*/>*/}
+            <IconButton
+              variant="outline"
+              aria-label="add client"
+              icon={<FiUserPlus/>}
+              onClick={onOpen}
+            />
 
-            {/*{isOpen && <AddClient isOpen={isOpen} onClose={onClose} />}*/}
+            {isOpen && <AddClient isOpen={isOpen} onClose={onClose} />}
 
             <Menu>
               <MenuButton
@@ -360,11 +360,13 @@ export default function Dashboard() {
                 <Td>{item.firstName} {item.lastName}</Td>
                 <Td>
                   <Tag
+                    justifyContent={"center"}
                     size={"md"}
+                    minW={"90%"}
                     variant={"solid"}
-                    backgroundColor={statusColors[item.status]}
+                    backgroundColor={statusColors[item.current]}
                   >
-                    {item.status}
+                    {item.current}
                   </Tag>
                 </Td>
                 <Td>

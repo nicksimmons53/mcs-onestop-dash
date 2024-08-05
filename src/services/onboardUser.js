@@ -5,10 +5,16 @@ const onboardUserApi = emptySplitApi.injectEndpoints({
     getOnboardUsers: build.query({
       query: () => `/users`,
     }),
+    getOnboardUserById:  build.query(({
+      query: ({ sub }) => ({
+        url: `/users?sub=${sub}`,
+      })
+    }))
   }),
   overrideExisting: false,
 });
 
 export const {
   useGetOnboardUsersQuery,
+  useGetOnboardUserByIdQuery,
 } = onboardUserApi;
