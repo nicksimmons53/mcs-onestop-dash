@@ -39,8 +39,10 @@ import s3 from "../../../lib/s3";
 import { useSelector } from "react-redux";
 import { questions, statusColors, tableHeaders } from "../../../src/lib/constants";
 import CustomTable from "../../../components/clients/customTable";
+import {useUser} from "@auth0/nextjs-auth0";
 
 export default function Client({id}) {
+  const authUser = useUser();
   const user = useSelector(state => state.user);
   const {data, error, isLoading} = useGetClientByIdQuery({id: id});
   const [files, setFiles] = React.useState([]);
@@ -94,7 +96,7 @@ export default function Client({id}) {
     updateStatus({
       id: id,
       body: {
-        user: user.info.email.split("@")[0],
+        user: authUser.user.email.split("@")[0],
         decision: decision,
       }
     })
@@ -338,8 +340,6 @@ const ProgramDetails = ({selections, data}) => {
       setProgram(value.toLowerCase());
     }
   }
-
-  console.log(data);
 
   return (
     <CustomTable
