@@ -342,18 +342,17 @@ const ProgramDetails = ({selections, data}) => {
   console.log(data);
 
   return (
-    <></>
-    // <CustomTable
-    //   title={"Information"}
-    //   headerRow={["Question", "Response"]}
-    //   data={ program !== null && data.programs[program] !== undefined && Object.values(data.programs[program]).map((value, index) => ({ question: questions[program][index], response: value === 1 ? "Yes" : value === 0 ? "No" : value }))}
-    //   cellKeys={["name", "title", "phone", "email"]}
-    //   key={"name"}
-    //   dropdownHeader={true}
-    //   dropdownPlaceholder={"Select a Program"}
-    //   dropdownOptions={Object.keys(selections).filter(program => selections[program] === 1).map(program => program[0].toUpperCase() + program.slice(1))}
-    //   dropdownAction={handleChange}
-    // />
+    <CustomTable
+      title={"Information"}
+      headerRow={["Question", "Response"]}
+      data={ program !== null && data.programs[program] !== undefined && Object.values(data.programs[program]).map((value, index) => ({ question: questions[program][index], response: value === 1 ? "Yes" : value === 0 ? "No" : value }))}
+      cellKeys={["name", "title", "phone", "email"]}
+      key={"name"}
+      dropdownHeader={true}
+      dropdownPlaceholder={"Select a Program"}
+      dropdownOptions={Object.keys(selections).filter(program => selections[program] === 1).map(program => program[0].toUpperCase() + program.slice(1))}
+      dropdownAction={handleChange}
+    />
   )
 }
 
