@@ -116,8 +116,6 @@ export default function Client({id}) {
 
   if (isLoading || details.isLoading || programs.isLoading) return <Loading/>;
 
-  console.log(data)
-
   return (
     <Layout>
       <TabHeader title={data.basicInfo.name}/>
@@ -240,34 +238,36 @@ const BasicInfo = ({data, files}) => {
         key={"name"}
       />
 
-      <CustomTable
-        title={"Files"}
-        headerRow={["Name", "Type", "Size", "Date Uploaded", ""]}
-        data={files !== undefined && files.map((file, index) => ({
-          name: file.Key.split("/")[1],
-          type: file.Key.split(".")[1],
-          size: `${(file.Size / 1000000).toFixed(2)} MBs`,
-          uploaded: new Date(file.lastModified).toLocaleDateString("UTC", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric"
-          }),
-          button: (
-            <Button colorScheme={"blue"} size={"sm"} onClick={viewFile} value={JSON.stringify(file)}>
-              Download
-            </Button>
-          )
-        }))}
-        cellKeys={["type", "address", "city", "state", "zip"]}
-        key={"type"}
-      />
+      {/*<CustomTable*/}
+      {/*  title={"Files"}*/}
+      {/*  headerRow={["Name", "Type", "Size", "Date Uploaded", ""]}*/}
+      {/*  data={files !== undefined && files.map((file, index) => ({*/}
+      {/*    name: file.Key.split("/")[1],*/}
+      {/*    type: file.Key.split(".")[1],*/}
+      {/*    size: `${(file.Size / 1000000).toFixed(2)} MBs`,*/}
+      {/*    uploaded: new Date(file.lastModified).toLocaleDateString("UTC", {*/}
+      {/*      year: "numeric",*/}
+      {/*      month: "numeric",*/}
+      {/*      day: "numeric",*/}
+      {/*      hour: "numeric",*/}
+      {/*      minute: "numeric"*/}
+      {/*    }),*/}
+      {/*    button: (*/}
+      {/*      <Button colorScheme={"blue"} size={"sm"} onClick={viewFile} value={JSON.stringify(file)}>*/}
+      {/*        Download*/}
+      {/*      </Button>*/}
+      {/*    )*/}
+      {/*  }))}*/}
+      {/*  cellKeys={["type", "address", "city", "state", "zip"]}*/}
+      {/*  key={"type"}*/}
+      {/*/>*/}
 
       <CustomTable
         title={"Programs"}
         headerRow={["Selections"]}
-        data={data.programs !== undefined && Object.keys(data.programs).filter(item => data.programs[item])}
+        data={data.programs !== undefined && Object.keys(data.programs).filter(item => data.programs[item]).map((item, index) => ({
+          selection: item
+        }))}
         cellKeys={["selection"]}
         key={"selection"}
       />
