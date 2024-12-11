@@ -28,6 +28,13 @@ const clientApi = emptySplitApi.injectEndpoints({
                 body: body,
             }),
             invalidatesTags: ["Status"],
+        }),
+        createApproval: build.mutation({
+            query: ({ body }) => ({
+                url: `/clients/approval`,
+                method: "POST",
+                body: body,
+            })
         })
     }),
     overrideExisting: false,
@@ -41,4 +48,5 @@ export const {
     useGetClientProgramInfoQuery,
     useGetClientBillingPartsQuery,
     useUpdateUserApprovalMutation,
+    useCreateApprovalMutation,
 } = clientApi;

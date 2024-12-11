@@ -294,12 +294,12 @@ const BasicInfo = ({data, files}) => {
       <CustomTable
         title={"Approvals"}
         headerRow={["Manager", "Response"]}
-        data={data.approvals !== undefined && Object.keys(data.approvals).filter(field => field !== "lastSubmittedAt").map(manager => ({
-          manager: manager,
-          response: data.approvals[manager] === 1 ? "Approved" : data.approvals[manager] === 0 ? "Declined" : "No Response"
+        data={data.clientApprovals.map((item, index) => ({
+          name: `${item.firstName} ${item.lastName}`,
+          decision: item.decision
         }))}
-        cellKeys={["manager", "response"]}
-        key={"manager"}
+        cellKeys={["name", "decision"]}
+        key={"name"}
       />
     </>
   );
@@ -386,7 +386,7 @@ const PricingBreakdown = ({data}) => {
         <CustomTable
           title={table}
           headerRow={["Description", "Unit", "Billing Amount"]}
-          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount.toFixed(2) }))}
+          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount }))}
           cellKeys={["Description", "Unit", "BillingAmount"]}
           key={"description"}
         />
@@ -396,7 +396,7 @@ const PricingBreakdown = ({data}) => {
         <CustomTable
           title={table}
           headerRow={["Description", "Unit", "Billing Amount"]}
-          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount.toFixed(2) }))}
+          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount }))}
           cellKeys={["description", "unit", "billingAmount"]}
           key={"description"}
         />
@@ -406,7 +406,7 @@ const PricingBreakdown = ({data}) => {
         <CustomTable
           title={table}
           headerRow={["Description", "Unit", "Billing Amount"]}
-          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount.toFixed(2) }))}
+          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount }))}
           cellKeys={["description", "unit", "billingAmount"]}
           key={"description"}
         />
