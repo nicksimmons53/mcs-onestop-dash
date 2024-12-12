@@ -291,16 +291,18 @@ const BasicInfo = ({data, files}) => {
       {/*  </Table>*/}
       {/*</TableContainer>*/}
 
-      <CustomTable
-        title={"Approvals"}
-        headerRow={["Manager", "Response"]}
-        data={data.clientApprovals.map((item, index) => ({
-          name: `${item.firstName} ${item.lastName}`,
-          decision: item.decision
-        }))}
-        cellKeys={["name", "decision"]}
-        key={"name"}
-      />
+      {data.status.current !== "Potential" && (
+        <CustomTable
+          title={"Approvals"}
+          headerRow={["Manager", "Response"]}
+          data={data.clientApprovals.map((item, index) => ({
+            name: `${item.firstName} ${item.lastName}`,
+            decision: item.decision
+          }))}
+          cellKeys={["name", "decision"]}
+          key={"name"}
+        />
+      )}
     </>
   );
 }
