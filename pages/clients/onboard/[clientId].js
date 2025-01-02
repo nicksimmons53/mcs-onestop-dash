@@ -311,14 +311,14 @@ const BasicInfo = ({data}) => {
         />
       )}
 
-      <CustomTable
-        title={"Files"}
-        headerRow={["Name", "Size", "Created By", "Created Time"]}
-        data={formattedFiles}
-        cellKeys={["name", "size", "createdby", "createdtime"]}
-        key={"id"}
-        fileTable={true}
-      />
+      {/*<CustomTable*/}
+      {/*  title={"Files"}*/}
+      {/*  headerRow={["Name", "Size", "Created By", "Created Time"]}*/}
+      {/*  data={formattedFiles}*/}
+      {/*  cellKeys={["name", "size", "createdby", "createdtime"]}*/}
+      {/*  key={"id"}*/}
+      {/*  fileTable={true}*/}
+      {/*/>*/}
     </>
   );
 }
