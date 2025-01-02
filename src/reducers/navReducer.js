@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 import _ from "lodash";
 
 const initialState = {
@@ -15,6 +15,6 @@ const navSlice = createSlice({
   }
 });
 
-export const { setNav } = navSlice.actions;
+export const {setNav} = navSlice.actions;
 
 export default navSlice.reducer;

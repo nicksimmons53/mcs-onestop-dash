@@ -28,21 +28,18 @@ import {
 } from "@chakra-ui/react";
 import {FiChevronDown, FiChevronUp, FiPlus, FiUploadCloud, FiX} from "react-icons/fi";
 import {useFieldArray, useForm} from "react-hook-form";
-import {useSelector} from "react-redux";
-import {useGetOnboardUserByIdQuery} from "../../../../src/services/onboardUser";
 import {useUser} from "@auth0/nextjs-auth0";
-import s3 from "../../../../lib/s3";
 
 // TODO: add alert to cancel function
 // TODO: readd required variable
-export default function AddClient({ isOpen, onClose }) {
+export default function AddClient({isOpen, onClose}) {
   const {
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitting },
+    formState: {errors, isSubmitting},
   } = useForm();
-  const { fields, append, remove } = useFieldArray({
+  const {fields, append, remove} = useFieldArray({
     name: "contacts",
     control
   });
@@ -51,7 +48,7 @@ export default function AddClient({ isOpen, onClose }) {
   const contactsDisc = useDisclosure();
   const [files, setFiles] = React.useState([]);
   const fileRef = useRef();
-  const { user, isLoading, error } = useUser();
+  const {user, isLoading, error} = useUser();
   // const onboardUser = useGetOnboardUserByIdQuery({ sub: user.sub });
 
   const handleFileButtonClick = (e) => {
@@ -79,10 +76,10 @@ export default function AddClient({ isOpen, onClose }) {
   }
 
   return (
-    <Drawer isOpen={isOpen} placement={"right"} onClose={onClose} size={"lg"}>
-      <DrawerOverlay />
+    (<Drawer isOpen={isOpen} placement={"right"} onClose={onClose} size={"lg"}>
+      <DrawerOverlay/>
       <DrawerContent>
-        <DrawerCloseButton />
+        <DrawerCloseButton/>
         <DrawerHeader borderBottomWidth={1}>
           Add Client
         </DrawerHeader>
@@ -154,8 +151,7 @@ export default function AddClient({ isOpen, onClose }) {
                   <Input
                     id={"corporate.address2"}
                     placeholder={"Apt/Unit/Ste"}
-                    {...register("corporate.address2", {
-                    })}
+                    {...register("corporate.address2", {})}
                   />
                   <HStack justifyContent={"flex-end"}>
                     <FormErrorMessage>
@@ -187,7 +183,7 @@ export default function AddClient({ isOpen, onClose }) {
                     placeholder={"(i.e. TX/CA/OK)"}
                     {...register("corporate.state", {
                       //required: "Required Field",
-                      maxLength: { value: 2, message: "Should be in abbreviated format." }
+                      maxLength: {value: 2, message: "Should be in abbreviated format."}
                     })}
                   />
                   <HStack justifyContent={"flex-end"}>
@@ -204,7 +200,7 @@ export default function AddClient({ isOpen, onClose }) {
                     placeholder={"Zip Code"}
                     {...register("corporate.zip", {
                       //required: "Required Field",
-                      pattern: { value: /\d{5}/, message: "Should be a 5 digit zip code." }
+                      pattern: {value: /\d{5}/, message: "Should be a 5 digit zip code."}
                     })}
                   />
                   <HStack justifyContent={"flex-end"}>
@@ -223,7 +219,7 @@ export default function AddClient({ isOpen, onClose }) {
                   variant="outline"
                   aria-label="open input"
                   onClick={billingAddrDisc.onToggle}
-                  icon={billingAddrDisc.isOpen ? <FiChevronUp /> : <FiChevronDown />}
+                  icon={billingAddrDisc.isOpen ? <FiChevronUp/> : <FiChevronDown/>}
                 />
               </HStack>
 
@@ -233,8 +229,7 @@ export default function AddClient({ isOpen, onClose }) {
                   <Input
                     id={"billing.address1"}
                     placeholder={"Street Name"}
-                    {...register("billing.address1", {
-                    })}
+                    {...register("billing.address1", {})}
                   />
                   <HStack justifyContent={"flex-end"}>
                     <FormErrorMessage>
@@ -248,8 +243,7 @@ export default function AddClient({ isOpen, onClose }) {
                   <Input
                     id={"billing.address2"}
                     placeholder={"Apt/Unit/Ste"}
-                    {...register("billing.address2", {
-                    })}
+                    {...register("billing.address2", {})}
                   />
                   <HStack justifyContent={"flex-end"}>
                     <FormErrorMessage>
@@ -263,8 +257,7 @@ export default function AddClient({ isOpen, onClose }) {
                   <Input
                     id={"billing.city"}
                     placeholder={"City Name"}
-                    {...register("billing.city", {
-                    })}
+                    {...register("billing.city", {})}
                   />
                   <HStack justifyContent={"flex-end"}>
                     <FormErrorMessage>
@@ -279,7 +272,7 @@ export default function AddClient({ isOpen, onClose }) {
                     id={"billing.state"}
                     placeholder={"(i.e. TX/CA/OK)"}
                     {...register("billing.state", {
-                      maxLength: { value: 2, message: "Should be in abbreviated format." }
+                      maxLength: {value: 2, message: "Should be in abbreviated format."}
                     })}
                   />
                   <HStack justifyContent={"flex-end"}>
@@ -295,7 +288,7 @@ export default function AddClient({ isOpen, onClose }) {
                     id={"billing.zip"}
                     placeholder={"Zip Code"}
                     {...register("billing.zip", {
-                      pattern: { value: /\d{5}/, message: "Should be a 5 digit zip code." }
+                      pattern: {value: /\d{5}/, message: "Should be a 5 digit zip code."}
                     })}
                   />
                   <HStack justifyContent={"flex-end"}>
@@ -314,7 +307,7 @@ export default function AddClient({ isOpen, onClose }) {
                   variant="outline"
                   aria-label="open input"
                   onClick={shippingAddrDisc.onToggle}
-                  icon={shippingAddrDisc.isOpen ? <FiChevronUp /> : <FiChevronDown />}
+                  icon={shippingAddrDisc.isOpen ? <FiChevronUp/> : <FiChevronDown/>}
                 />
               </HStack>
 
@@ -324,8 +317,7 @@ export default function AddClient({ isOpen, onClose }) {
                   <Input
                     id={"shipping.address1"}
                     placeholder={"Street Name"}
-                    {...register("shipping.address1", {
-                    })}
+                    {...register("shipping.address1", {})}
                   />
                   <HStack justifyContent={"flex-end"}>
                     <FormErrorMessage>
@@ -339,8 +331,7 @@ export default function AddClient({ isOpen, onClose }) {
                   <Input
                     id={"shipping.address2"}
                     placeholder={"Apt/Unit/Ste"}
-                    {...register("shipping.address2", {
-                    })}
+                    {...register("shipping.address2", {})}
                   />
                   <HStack justifyContent={"flex-end"}>
                     <FormErrorMessage>
@@ -354,8 +345,7 @@ export default function AddClient({ isOpen, onClose }) {
                   <Input
                     id={"shipping.city"}
                     placeholder={"City Name"}
-                    {...register("shipping.city", {
-                    })}
+                    {...register("shipping.city", {})}
                   />
                   <HStack justifyContent={"flex-end"}>
                     <FormErrorMessage>
@@ -370,7 +360,7 @@ export default function AddClient({ isOpen, onClose }) {
                     id={"shipping.state"}
                     placeholder={"(i.e. TX/CA/OK)"}
                     {...register("shipping.state", {
-                      maxLength: { value: 2, message: "Should be in abbreviated format." }
+                      maxLength: {value: 2, message: "Should be in abbreviated format."}
                     })}
                   />
                   <HStack justifyContent={"flex-end"}>
@@ -386,7 +376,7 @@ export default function AddClient({ isOpen, onClose }) {
                     id={"shipping.zip"}
                     placeholder={"Zip Code"}
                     {...register("shipping.zip", {
-                      pattern: { value: /\d{5}/, message: "Should be a 5 digit zip code." }
+                      pattern: {value: /\d{5}/, message: "Should be a 5 digit zip code."}
                     })}
                   />
                   <HStack justifyContent={"flex-end"}>
@@ -401,10 +391,11 @@ export default function AddClient({ isOpen, onClose }) {
             <Box>
               <HStack my={2} justifyContent={"space-between"}>
                 <Heading size={"md"} mb={1}>Files</Heading>
-                <Button rightIcon={<FiUploadCloud/>} colorScheme={"blue"} variant={"outline"} onClick={handleFileButtonClick}>
+                <Button rightIcon={<FiUploadCloud/>} colorScheme={"blue"} variant={"outline"}
+                        onClick={handleFileButtonClick}>
                   Upload
                 </Button>
-                <Input type={"file"} hidden ref={fileRef} id={"file"} onChange={uploadFiles} multiple />
+                <Input type={"file"} hidden ref={fileRef} id={"file"} onChange={uploadFiles} multiple/>
               </HStack>
 
               <TableContainer borderWidth={1} borderRadius={5}>
@@ -454,6 +445,6 @@ export default function AddClient({ isOpen, onClose }) {
           </Button>
         </DrawerFooter>
       </DrawerContent>
-    </Drawer>
+    </Drawer>)
   );
 }

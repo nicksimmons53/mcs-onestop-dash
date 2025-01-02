@@ -1,10 +1,9 @@
 import React from "react";
 import _ from "lodash";
 import Layout from "../../../components/layout";
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 import TabHeader from "../../../components/tabHeader";
 import {
-  Button,
   Divider,
   Heading,
   HStack,
@@ -20,24 +19,22 @@ import {
   useToast,
   VStack,
   Tag,
-  Table,
-  TableContainer,
   Center,
   Text,
-  Select, Thead, Tr, Th, Tbody, Td,
+  Select,
 } from "@chakra-ui/react";
 import {
   useGetClientBillingPartsQuery,
   useGetClientByIdQuery,
   useGetClientDetailsQuery,
   useGetClientProgramInfoQuery,
+  useGetFilesQuery,
   useUpdateUserApprovalMutation,
 } from "../../../src/services/client";
 import Loading from "../../../components/loading";
-import { FiMenu } from "react-icons/fi";
-import s3 from "../../../lib/s3";
-import { useSelector } from "react-redux";
-import { questions, statusColors, tableHeaders } from "../../../src/lib/constants";
+import {FiMenu} from "react-icons/fi";
+import {useSelector} from "react-redux";
+import {questions, statusColors, tableHeaders} from "../../../src/lib/constants";
 import CustomTable from "../../../components/clients/customTable";
 import {useUser} from "@auth0/nextjs-auth0";
 
@@ -45,14 +42,14 @@ export default function Client({id}) {
   const authUser = useUser();
   const user = useSelector(state => state.user);
   const {data, error, isLoading} = useGetClientByIdQuery({id: id});
-  const [files, setFiles] = React.useState([]);
   const router = useRouter();
+  const [folderId, setFolderId] = React.useState(null);
+  const [activeTab, setActiveTab] = React.useState("Basic Information");
+  const [submittedAt, setSubmittedAt] = React.useState("");
   const [updateStatus, result] = useUpdateUserApprovalMutation();
   const details = useGetClientDetailsQuery({id: id});
   const programs = useGetClientProgramInfoQuery({id: id});
   const pricing = useGetClientBillingPartsQuery({id: id});
-  const [activeTab, setActiveTab] = React.useState("Basic Information");
-  const [submittedAt, setSubmittedAt] = React.useState("");
 
   const toast = useToast();
   const bgColor = useColorModeValue('white', 'gray.900');
@@ -66,18 +63,7 @@ export default function Client({id}) {
   ];
 
   React.useEffect(() => {
-    const getFiles = async () => {
-      setFiles(await s3.getFiles(
-        {
-          sageUserId: data.basicInfo.sageUserId,
-          sageEmployeeNumber: data.basicInfo.sageEmployeeNumber
-        },
-        data.basicInfo.name
-      ));
-    }
-
     if (data) {
-      getFiles();
       setSubmittedAt(new Date(data.approvals?.lastSubmittedAt).toLocaleDateString("UTC", {
         year: 'numeric',
         month: 'numeric',
@@ -85,6 +71,8 @@ export default function Client({id}) {
         hour: 'numeric',
         minute: 'numeric'
       }));
+
+      setFolderId(data.folder.sharepointId);
     }
   }, [data]);
 
@@ -193,7 +181,7 @@ export default function Client({id}) {
           {tabs.map(tab => <Tab key={tab}>{tab}</Tab>)}
         </TabList>
 
-        {activeTab === "Basic Information" && <BasicInfo data={data} files={files}/>}
+        {activeTab === "Basic Information" && <BasicInfo data={data}/>}
         {activeTab === "Accounting Details" &&
           <Details data={details.data.accounting} questions={questions.accounting}/>}
         {activeTab === "Expediting Details" &&
@@ -205,20 +193,39 @@ export default function Client({id}) {
   );
 }
 
-const BasicInfo = ({data, files}) => {
-  const viewFile = async (event) => {
-    let file = JSON.parse(event.target.value);
-    let fileUrl = await s3.viewObject(file);
-    fetch(fileUrl).then(function (t) {
-      return t.blob().then((b) => {
-          let a = document.createElement("a");
-          a.href = URL.createObjectURL(b);
-          a.setAttribute("download", file.Name);
-          a.click();
-        }
-      );
-    });
+const BasicInfo = ({data}) => {
+  const [folderId, setFolderId] = React.useState(data.folder.sharepointId);
+  const files = useGetFilesQuery({folderId: folderId});
+  const [formattedFiles, setFormattedFiles] = React.useState([]);
+  const [filePath, setFilePath] = React.useState([]);
+
+  React.useEffect(() => {
+    if (files.currentData) {
+      setFormattedFiles(files.currentData.map(file => ({
+        ...file,
+        size: `${(file["size"] / (1024 * 1024)).toFixed(2)} MBs`,
+        createdtime: new Date(file["createdDateTime"]).toLocaleString(),
+        createdby: file["createdBy"].user.displayName,
+        viewFile: file.hasOwnProperty("file") ? webURL => viewFile(webURL) : null,
+        navigateToFolder: file.hasOwnProperty("folder") ? (destID) => navigateToFolder(destID) : null,
+      })));
+    }
+  }, [files, setFormattedFiles]);
+
+  const navigateToFolder = (destID) => {
+    if (filePath.includes(destID)) {
+      setFilePath(filePath.filter(x => x !== destID));
+      setFolderId(filePath[filePath.length - 2]);
+    } else {
+      setFilePath(prevFilePath => [...prevFilePath, destID]);
+      setFolderId(destID);
+    }
   }
+
+  const viewFile = async (event) => {
+  }
+
+  console.log(formattedFiles);
 
   return (
     <>
@@ -303,6 +310,15 @@ const BasicInfo = ({data, files}) => {
           key={"name"}
         />
       )}
+
+      <CustomTable
+        title={"Files"}
+        headerRow={["Name", "Size", "Created By", "Created Time"]}
+        data={formattedFiles}
+        cellKeys={["name", "size", "createdby", "createdtime"]}
+        key={"id"}
+        fileTable={true}
+      />
     </>
   );
 }
@@ -323,7 +339,10 @@ const Details = ({questions, data}) => {
     <CustomTable
       title={"Information"}
       headerRow={["Question", "Response"]}
-      data={questions.map((question, index) => ({ question: question, response: values[index] === 0 ? "No" : values[index] === 1 ? "Yes" : values[index] }))}
+      data={questions.map((question, index) => ({
+        question: question,
+        response: values[index] === 0 ? "No" : values[index] === 1 ? "Yes" : values[index]
+      }))}
       cellKeys={["question", "response"]}
       key={"question"}
     />
@@ -347,7 +366,10 @@ const ProgramDetails = ({selections, data}) => {
     <CustomTable
       title={"Information"}
       headerRow={["Question", "Response"]}
-      data={ program !== null && data.programs[program] !== undefined && Object.values(data.programs[program]).map((value, index) => ({ question: questions[program][index], response: value === 1 ? "Yes" : value === 0 ? "No" : value }))}
+      data={program !== null && data.programs[program] !== undefined && Object.values(data.programs[program]).map((value, index) => ({
+        question: questions[program][index],
+        response: value === 1 ? "Yes" : value === 0 ? "No" : value
+      }))}
       cellKeys={["name", "title", "phone", "email"]}
       key={"name"}
       dropdownHeader={true}
@@ -388,7 +410,11 @@ const PricingBreakdown = ({data}) => {
         <CustomTable
           title={table}
           headerRow={["Description", "Unit", "Billing Amount"]}
-          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount }))}
+          data={tables[table].map(part => ({
+            description: part.Description,
+            unit: part.Unit,
+            billingAmount: part.BillingAmount
+          }))}
           cellKeys={["Description", "Unit", "BillingAmount"]}
           key={"description"}
         />
@@ -398,7 +424,11 @@ const PricingBreakdown = ({data}) => {
         <CustomTable
           title={table}
           headerRow={["Description", "Unit", "Billing Amount"]}
-          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount }))}
+          data={tables[table].map(part => ({
+            description: part.Description,
+            unit: part.Unit,
+            billingAmount: part.BillingAmount
+          }))}
           cellKeys={["description", "unit", "billingAmount"]}
           key={"description"}
         />
@@ -408,7 +438,11 @@ const PricingBreakdown = ({data}) => {
         <CustomTable
           title={table}
           headerRow={["Description", "Unit", "Billing Amount"]}
-          data={tables[table].map(part => ({ description: part.Description, unit: part.Unit, billingAmount: part.BillingAmount }))}
+          data={tables[table].map(part => ({
+            description: part.Description,
+            unit: part.Unit,
+            billingAmount: part.BillingAmount
+          }))}
           cellKeys={["description", "unit", "billingAmount"]}
           key={"description"}
         />

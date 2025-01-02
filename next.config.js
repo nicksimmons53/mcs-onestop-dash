@@ -10,7 +10,7 @@ module.exports = {
     NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI: process.env.NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI,
     ONBOARD_API_URL: process.env.ONBOARD_BASE_URL,
     SESSION_COOKIE_SECRET: process.env.SESSION_COOKIE_SECRET,
-    SESSION_COOKIE_LIFETIME: 10
+    SESSION_COOKIE_LIFETIME: "10"
   },
   images: {
     domains: ["s.gravatar.com"]

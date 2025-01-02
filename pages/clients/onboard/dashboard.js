@@ -36,7 +36,6 @@ import {
 import {useGetClientsQuery, useGetOnboardClientsQuery} from "../../../src/services/client";
 import Loading from "../../../components/loading";
 import {FiBarChart, FiFilter, FiUserPlus} from "react-icons/fi";
-import { TableFooter } from "semantic-ui-react";
 import _ from "lodash";
 import TabHeader from "../../../components/tabHeader";
 import ItemsPerPage from "../../../components/itemsPerPage";
@@ -51,7 +50,7 @@ const statusColors = {
   Declined: "#E74C3C",
   Pushed: "#58D68D",
 };
-const montserrat = Montserrat({ subsets: ['latin'] });
+const montserrat = Montserrat({subsets: ['latin']});
 
 export default function Dashboard() {
   const {data, error, isLoading} = useGetClientsQuery();
@@ -73,7 +72,7 @@ export default function Dashboard() {
       setClients(clientList);
       setNumOfPages(Math.ceil(clientList.length / clientsPerPage));
     }
-  }, [ clientsPerPage, data ]);
+  }, [clientsPerPage, data]);
 
   if (isLoading || data === undefined) return <Loading/>;
 
@@ -194,7 +193,7 @@ export default function Dashboard() {
               onClick={onOpen}
             />
 
-            {isOpen && <AddClient isOpen={isOpen} onClose={onClose} />}
+            {isOpen && <AddClient isOpen={isOpen} onClose={onClose}/>}
 
             <Menu>
               <MenuButton
@@ -336,7 +335,8 @@ export default function Dashboard() {
               </MenuList>
             </Menu>
 
-            <ItemsPerPage placeholder={"Clients per Page"} value={clientsPerPage} options={[10, 20, 50, 100]} onChange={handleChange} />
+            <ItemsPerPage placeholder={"Clients per Page"} value={clientsPerPage} options={[10, 20, 50, 100]}
+                          onChange={handleChange}/>
             {/*<ClientsPerPage/>*/}
             <Input placeholder={"Search Clients"} onChange={handleInput} minW={150}/>
           </HStack>
@@ -379,17 +379,15 @@ export default function Dashboard() {
               </Tr>
             ))}
           </Tbody>
-          <TableFooter>
-            <Tr>
-              <Td/>
-              <Td/>
-              <Td/>
-              <Td/>
-              <Box display={"flex"} justifyContent={"flex-end"}>
-                <Td>Total # of Clients: {clients.length}</Td>
-              </Box>
-            </Tr>
-          </TableFooter>
+          <Tr>
+            <Td/>
+            <Td/>
+            <Td/>
+            <Td/>
+            <Box display={"flex"} justifyContent={"flex-end"}>
+              <Td>Total # of Clients: {clients.length}</Td>
+            </Box>
+          </Tr>
         </Table>
 
         <HStack justifyContent={"center"} p={3}>

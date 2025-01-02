@@ -34,7 +34,7 @@ import {
   FiUsers, FiShield,
 } from "react-icons/fi";
 import {ArrowRightIcon, MoonIcon, SunIcon} from "@chakra-ui/icons";
-import { useUser } from "@auth0/nextjs-auth0";
+import {useUser} from "@auth0/nextjs-auth0";
 import Loading from "./loading";
 import icon from "../public/icon.png";
 import Image from "next/image";
@@ -56,7 +56,7 @@ const linkItems = [
     menu: true,
     active: false,
     subItems: [
-      { name: "OnBoard Clients", path: "/clients/onboard/dashboard" },
+      {name: "OnBoard Clients", path: "/clients/onboard/dashboard"},
       // { name: "Sage Clients", path: "/clients/sage/dashboard" }
     ]
   },
@@ -68,7 +68,7 @@ const linkItems = [
   // }
 ];
 
-export default function SidebarWithHeader({ children }) {
+export default function SidebarWithHeader({children}) {
   const {isOpen, onOpen, onClose} = useDisclosure();
   const bgColor = useColorModeValue("white", "gray.900");
   const dispatch = useDispatch();
@@ -105,7 +105,7 @@ export default function SidebarWithHeader({ children }) {
   );
 }
 
-const SidebarContent = ({ setPath, onClose, ...rest }) => {
+const SidebarContent = ({setPath, onClose, ...rest}) => {
   const bgColor = useColorModeValue("gray.900", "gray.900");
   const borderColor = useColorModeValue("gray.300", "gray.700");
   const path = useSelector(state => state.nav.path);
@@ -134,86 +134,86 @@ const SidebarContent = ({ setPath, onClose, ...rest }) => {
 
       <Accordion allowMultiple>
         {linkItems.map((link, i) => (
-          <React.Fragment key={link.name}>
-            <AccordionItem
-              align="center"
-              color={"white"}
-              borderColor={"gray.900"}
-              my={"2"}
-              borderRadius={"md"}
-              role="group"
-              cursor="pointer"
-              flex={1}
-              _hover={{
-                bg: "cyan.400",
-                color: "white",
-              }}>
+            <React.Fragment key={link.name}>
+              <AccordionItem
+                align="center"
+                color={"white"}
+                borderColor={"gray.900"}
+                my={"2"}
+                borderRadius={"md"}
+                role="group"
+                cursor="pointer"
+                flex={1}
+                _hover={{
+                  bg: "cyan.400",
+                  color: "white",
+                }}>
 
-              { !link.menu &&
-                <Link href={`${link.path}`} onClick={() => setPath(link.path)}>
-                  <Flex
-                    alignItems={"center"}
-                    bg={path === link.path && "cyan.400"}
-                    borderRadius={"md"}
-                    flex={1}
-                    pl={2}
-                    pr={2}
-                    py={2}
-                    _hover={{ bg: "cyan.400", color: "white" }}>
-                    <Box p={2}>
-                      <link.icon />
-                    </Box>
-                    {link.name}
-                  </Flex>
-                </Link>
-              }
-
-              { link.menu &&
-                <React.Fragment>
-                  <AccordionButton
-                    _expanded={{ bg: "cyan.400", borderBottomRadius: "none" }}
-                    bg={path === link.path && "cyan.400"}
-                    borderRadius={"md"}
-                    flex={1}
-                    justifyContent={"space-between"}
-                    pl={2}
-                    pr={1}>
-                    <Flex alignItems={"center"}>
+                {!link.menu &&
+                  <Link href={`${link.path}`} onClick={() => setPath(link.path)}>
+                    <Flex
+                      alignItems={"center"}
+                      bg={path === link.path && "cyan.400"}
+                      borderRadius={"md"}
+                      flex={1}
+                      pl={2}
+                      pr={2}
+                      py={2}
+                      _hover={{bg: "cyan.400", color: "white"}}>
                       <Box p={2}>
-                        <link.icon />
+                        <link.icon/>
                       </Box>
                       {link.name}
                     </Flex>
-                    {link.menu && <AccordionIcon /> }
-                  </AccordionButton>
+                  </Link>
+                }
 
-                  <AccordionPanel
-                    bg={"cyan.400"}
-                    borderBottomRadius={"md"}
-                    px={0}
-                    pb={0}>
-                    {link.subItems && link.subItems.map(subItem => (
-                      <Link key={subItem.name} href={`${subItem.path}`} onClick={() => setPath(subItem.path)}>
-                        <Flex
-                          alignItems={"center"}
-                          bg={path === subItem.path ? "cyan.500" : "cyan.400"}
-                          borderRadius={"md"}
-                          flex={1}
-                          justifyContent={"space-between"}
-                          pl={6}
-                          pr={2}
-                          py={3}
-                          _hover={{ bg: "cyan.500", color: "white" }}>
-                          <Text>{subItem.name}</Text>
-                          <ArrowRightIcon boxSize={3}/>
-                        </Flex>
-                      </Link>
-                    ))}
-                  </AccordionPanel>
-                </React.Fragment>
-              }
-            </AccordionItem>
-          </React.Fragment>
+                {link.menu &&
+                  <React.Fragment>
+                    <AccordionButton
+                      _expanded={{bg: "cyan.400", borderBottomRadius: "none"}}
+                      bg={path === link.path && "cyan.400"}
+                      borderRadius={"md"}
+                      flex={1}
+                      justifyContent={"space-between"}
+                      pl={2}
+                      pr={1}>
+                      <Flex alignItems={"center"}>
+                        <Box p={2}>
+                          <link.icon/>
+                        </Box>
+                        {link.name}
+                      </Flex>
+                      {link.menu && <AccordionIcon/>}
+                    </AccordionButton>
+
+                    <AccordionPanel
+                      bg={"cyan.400"}
+                      borderBottomRadius={"md"}
+                      px={0}
+                      pb={0}>
+                      {link.subItems && link.subItems.map(subItem => (
+                        <Link key={subItem.name} href={`${subItem.path}`} onClick={() => setPath(subItem.path)}>
+                          <Flex
+                            alignItems={"center"}
+                            bg={path === subItem.path ? "cyan.500" : "cyan.400"}
+                            borderRadius={"md"}
+                            flex={1}
+                            justifyContent={"space-between"}
+                            pl={6}
+                            pr={2}
+                            py={3}
+                            _hover={{bg: "cyan.500", color: "white"}}>
+                            <Text>{subItem.name}</Text>
+                            <ArrowRightIcon boxSize={3}/>
+                          </Flex>
+                        </Link>
+                      ))}
+                    </AccordionPanel>
+                  </React.Fragment>
+                }
+              </AccordionItem>
+            </React.Fragment>
           )
         )}
       </Accordion>
@@ -221,7 +221,7 @@ const SidebarContent = ({ setPath, onClose, ...rest }) => {
   );
 };
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({onOpen, ...rest}) => {
   const {colorMode, toggleColorMode} = useColorMode();
   const {user} = useUser();
   const bgColor = useColorModeValue("white4", "gray.900");

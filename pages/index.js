@@ -2,67 +2,48 @@ import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Error from "next/error";
-import { useUser } from "@auth0/nextjs-auth0";
+import {useUser} from "@auth0/nextjs-auth0";
 import Layout from "../components/layout";
 import Loading from "../components/loading";
-import { Box, Button, Divider, Heading, SimpleGrid } from "@chakra-ui/react";
-import { db } from "../lib/firestore";
-import { getDoc, doc } from "firebase/firestore";
-import { setUser } from "../src/reducers/userReducer";
-import { useDispatch, useSelector } from "react-redux";
+import {Box, Button, Divider, Heading, SimpleGrid} from "@chakra-ui/react";
 
 export default function Home() {
-    const { user, isLoading, error } = useUser();
-    const userInfo = useSelector(state => state.user.info);
-    const dispatch = useDispatch();
+  const {user, isLoading, error} = useUser();
 
-    React.useEffect(() => {
-        const getData = async(email) => {
-            const docRef = await getDoc(doc(db, "users", email));
-            const userData = docRef.data();
+  if (isLoading) return <Loading/>;
+  if (error) return <Error/>;
+  if (!user) window.location = "/api/auth/login";
 
-            return userData;
-        }
+  return user && (
+    <Layout>
+      <Head>
+        <title>MCS | Home</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+        <link rel="manifest" href="/site.webmanifest"/>
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000"/>
+        <meta name="msapplication-TileColor" content="#cad3d5"/>
+        <meta name="theme-color" content="#ffffff"/>
+      </Head>
 
-        if (user && userInfo === null) {
-            getData(user.email).then(result => dispatch(setUser(result)));
-        }
-    }, [ dispatch, user, userInfo ]);
+      <SimpleGrid minChildWidth={200} spacing={"10px"}>
+        <Box borderRadius={5} p={5} shadow='md' borderWidth='1px'>
+          <Heading size={"lg"}>Clients</Heading>
+          <Divider/>
+          <Link href={"/clients/onboard/dashboard"}>
+            <Button colorScheme={"blue"} mt={5} width={"100%"}>View</Button>
+          </Link>
+        </Box>
 
-    if (isLoading) return <Loading />;
-    if (error) return <Error />;
-    if (!user) window.location = "/api/auth/login";
-
-    return user && (
-        <Layout>
-            <Head>
-                <title>MCS | Home</title>
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-                <link rel="manifest" href="/site.webmanifest"/>
-                <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000"/>
-                <meta name="msapplication-TileColor" content="#cad3d5"/>
-                <meta name="theme-color" content="#ffffff"/>
-            </Head>
-
-            <SimpleGrid minChildWidth={200} spacing={"10px"}>
-                <Box borderRadius={5} p={5} shadow='md' borderWidth='1px'>
-                    <Heading size={"lg"}>Clients</Heading>
-                    <Divider/>
-                    <Link href={"/clients/onboard/dashboard"}>
-                        <Button colorScheme={"blue"} mt={5} width={"100%"}>View</Button>
-                    </Link>
-                </Box>
-
-              {/*<Box borderRadius={5} p={5} shadow='md' borderWidth='1px'>*/}
-              {/*  <Heading size={"lg"}>Employees</Heading>*/}
-              {/*  <Divider/>*/}
-              {/*  <Link href={"/employees/add-user"}>*/}
-              {/*    <Button colorScheme={"blue"} mt={5} width={"100%"}>View</Button>*/}
-              {/*  </Link>*/}
-              {/*</Box>*/}
-            </SimpleGrid>
-        </Layout>
-    );
+        {/*<Box borderRadius={5} p={5} shadow='md' borderWidth='1px'>*/}
+        {/*  <Heading size={"lg"}>Employees</Heading>*/}
+        {/*  <Divider/>*/}
+        {/*  <Link href={"/employees/add-user"}>*/}
+        {/*    <Button colorScheme={"blue"} mt={5} width={"100%"}>View</Button>*/}
+        {/*  </Link>*/}
+        {/*</Box>*/}
+      </SimpleGrid>
+    </Layout>
+  );
 }

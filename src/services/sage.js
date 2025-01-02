@@ -1,4 +1,4 @@
-import { emptySplitApi } from "./emptySplitApi";
+import {emptySplitApi} from "./emptySplitApi";
 
 const sageApi = emptySplitApi.injectEndpoints({
   endpoints: (build) => ({
@@ -8,7 +8,7 @@ const sageApi = emptySplitApi.injectEndpoints({
       })
     }),
     getSageClient: build.query(({
-      query: ({ id }) => ({
+      query: ({id}) => ({
         url: `/sage/clients/${id}?company=MCS - TESTING`,
       })
     }))
