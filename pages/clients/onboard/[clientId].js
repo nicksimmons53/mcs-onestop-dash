@@ -225,7 +225,7 @@ const BasicInfo = ({data}) => {
   const viewFile = async (event) => {
   }
 
-  console.log(formattedFiles);
+  console.log(data.approvals);
 
   return (
     <>
@@ -302,9 +302,9 @@ const BasicInfo = ({data}) => {
         <CustomTable
           title={"Approvals"}
           headerRow={["Manager", "Response"]}
-          data={data.clientApprovals.map((item, index) => ({
-            name: `${item.firstName} ${item.lastName}`,
-            decision: item.decision
+          data={Object.keys(data.approvals).filter(x => x !== "lastSubmittedAt").map((item, index) => ({
+            name: item,
+            decision: item.decision || "No Decision"
           }))}
           cellKeys={["name", "decision"]}
           key={"name"}
