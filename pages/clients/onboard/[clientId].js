@@ -43,7 +43,6 @@ export default function Client({id}) {
   const user = useSelector(state => state.user);
   const {data, error, isLoading} = useGetClientByIdQuery({id: id});
   const router = useRouter();
-  const [folderId, setFolderId] = React.useState(null);
   const [activeTab, setActiveTab] = React.useState("Basic Information");
   const [submittedAt, setSubmittedAt] = React.useState("");
   const [updateStatus, result] = useUpdateUserApprovalMutation();
@@ -71,8 +70,6 @@ export default function Client({id}) {
         hour: 'numeric',
         minute: 'numeric'
       }));
-
-      setFolderId(data.folder.sharepointId);
     }
   }, [data]);
 
@@ -198,6 +195,7 @@ const BasicInfo = ({data}) => {
   const files = useGetFilesQuery({folderId: folderId});
   const [formattedFiles, setFormattedFiles] = React.useState([]);
   const [filePath, setFilePath] = React.useState([]);
+  const [approvals, setApprovals] = React.useState([]);
 
   React.useEffect(() => {
     if (files.currentData) {
@@ -211,6 +209,15 @@ const BasicInfo = ({data}) => {
       })));
     }
   }, [files, setFormattedFiles]);
+
+  React.useEffect(() => {
+    if (data.approvals) {
+      setApprovals(Object.keys(data.approvals).filter(x => x !== "lastSubmittedAt").map((item, index) => ({
+        name: item,
+        decision: !data.approvals[item] ? "No Decision" : data.approvals[item] === 1 ? "Approved" : "Declined",
+      })));
+    }
+  }, [data.approvals, setApprovals]);
 
   const navigateToFolder = (destID) => {
     if (filePath.includes(destID)) {
@@ -245,30 +252,6 @@ const BasicInfo = ({data}) => {
         key={"name"}
       />
 
-      {/*<CustomTable*/}
-      {/*  title={"Files"}*/}
-      {/*  headerRow={["Name", "Type", "Size", "Date Uploaded", ""]}*/}
-      {/*  data={files !== undefined && files.map((file, index) => ({*/}
-      {/*    name: file.Key.split("/")[1],*/}
-      {/*    type: file.Key.split(".")[1],*/}
-      {/*    size: `${(file.Size / 1000000).toFixed(2)} MBs`,*/}
-      {/*    uploaded: new Date(file.lastModified).toLocaleDateString("UTC", {*/}
-      {/*      year: "numeric",*/}
-      {/*      month: "numeric",*/}
-      {/*      day: "numeric",*/}
-      {/*      hour: "numeric",*/}
-      {/*      minute: "numeric"*/}
-      {/*    }),*/}
-      {/*    button: (*/}
-      {/*      <Button colorScheme={"blue"} size={"sm"} onClick={viewFile} value={JSON.stringify(file)}>*/}
-      {/*        Download*/}
-      {/*      </Button>*/}
-      {/*    )*/}
-      {/*  }))}*/}
-      {/*  cellKeys={["type", "address", "city", "state", "zip"]}*/}
-      {/*  key={"type"}*/}
-      {/*/>*/}
-
       <CustomTable
         title={"Programs"}
         headerRow={["Selections"]}
@@ -279,46 +262,24 @@ const BasicInfo = ({data}) => {
         key={"selection"}
       />
 
-      {/*<TableContainer borderWidth={"1px"} borderRadius={5} m={5}>*/}
-      {/*  <HStack justifyContent={"space-between"} p={3}>*/}
-      {/*    <Text flex={2} fontSize={"lg"} fontWeight={"bold"}>Programs</Text>*/}
-      {/*  </HStack>*/}
-      {/*  <Divider/>*/}
-      {/*  <Table variant={"simple"}>*/}
-      {/*    <Thead>*/}
-      {/*      <Tr>*/}
-      {/*        <Th>Selections</Th>*/}
-      {/*      </Tr>*/}
-      {/*    </Thead>*/}
-      {/*    <Tbody>*/}
-      {/*      {data.programs !== undefined && data.programs.filter(item => data.programs[item] === 1).map(item => (*/}
-      {/*        <Td key={item}>{item}</Td>*/}
-      {/*      ))}*/}
-      {/*    </Tbody>*/}
-      {/*  </Table>*/}
-      {/*</TableContainer>*/}
-
       {data.status.current !== "Potential" && (
         <CustomTable
           title={"Approvals"}
           headerRow={["Manager", "Response"]}
-          data={Object.keys(data.approvals).filter(x => x !== "lastSubmittedAt").map((item, index) => ({
-            name: item,
-            decision: item.decision || "No Decision"
-          }))}
+          data={approvals}
           cellKeys={["name", "decision"]}
           key={"name"}
         />
       )}
 
-      {/*<CustomTable*/}
-      {/*  title={"Files"}*/}
-      {/*  headerRow={["Name", "Size", "Created By", "Created Time"]}*/}
-      {/*  data={formattedFiles}*/}
-      {/*  cellKeys={["name", "size", "createdby", "createdtime"]}*/}
-      {/*  key={"id"}*/}
-      {/*  fileTable={true}*/}
-      {/*/>*/}
+      <CustomTable
+        title={"Files"}
+        headerRow={["Name", "Size", "Created By", "Created Time"]}
+        data={formattedFiles}
+        cellKeys={["name", "size", "createdby", "createdtime"]}
+        key={"id"}
+        fileTable={true}
+      />
     </>
   );
 }
