@@ -1,5 +1,6 @@
 import {Divider, HStack, TableContainer, Table, Tbody, Td, Text, Th, Thead, Tr, Select} from "@chakra-ui/react";
 import React from "react";
+import {redirect} from "next/navigation";
 
 export default function CustomTable({
   title,
@@ -11,7 +12,8 @@ export default function CustomTable({
   dropdownPlaceholder,
   dropdownOptions,
   dropdownAction,
-  fileTable=false
+  fileTable=false,
+  ActionBar=null
 }) {
   return (
     <TableContainer borderWidth={"1px"} borderRadius={5} m={5}>
@@ -25,20 +27,29 @@ export default function CustomTable({
           </Select>
         }
       </HStack>
+
       <Divider/>
+
+      {ActionBar &&
+        <React.Fragment>
+          <ActionBar/>
+          <Divider/>
+        </React.Fragment>
+      }
+
       <Table variant={"simple"}>
-        <Thead>
           <Tr>
             {headerRow.map(column => (
               <Th key={column}>{column}</Th>
             ))}
           </Tr>
-        </Thead>
+        {/*</Thead>*/}
+
         <Tbody>
           {data && true && data.map((item, index) => {
             if (item.hasOwnProperty("folder") && fileTable) {
               return (
-                <Tr key={key} onClick={() => item.navigateToFolder(item.id)} className={"hover: cursor-pointer"}>
+                <Tr key={key} onClick={() => item.navigateToFolder(item.id)} _hover={{cursor: "pointer", opacity: 0.5}}>
                   {cellKeys.map(cell => (
                     <Td key={item}>{item[cell]}</Td>
                   ))}
@@ -46,7 +57,7 @@ export default function CustomTable({
               )
             } else if (item.hasOwnProperty("file") && fileTable) {
               return (
-                <Tr key={key} onClick={() => console.log(item.webUrl)}>
+                <Tr key={key} onClick={() => window.open(item.webUrl, "_blank")} _hover={{cursor: "pointer", opacity: 0.5}}>
                   {cellKeys.map(cell => (
                     <Td key={item}>{item[cell]}</Td>
                   ))}

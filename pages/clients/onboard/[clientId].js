@@ -21,7 +21,7 @@ import {
   Tag,
   Center,
   Text,
-  Select,
+  Select, Tr,
 } from "@chakra-ui/react";
 import {
   useGetClientBillingPartsQuery,
@@ -32,7 +32,7 @@ import {
   useUpdateUserApprovalMutation,
 } from "../../../src/services/client";
 import Loading from "../../../components/loading";
-import {FiMenu} from "react-icons/fi";
+import {FiArrowLeft, FiMenu, FiUserPlus} from "react-icons/fi";
 import {useSelector} from "react-redux";
 import {questions, statusColors, tableHeaders} from "../../../src/lib/constants";
 import CustomTable from "../../../components/clients/customTable";
@@ -198,6 +198,12 @@ const BasicInfo = ({data}) => {
   const [approvals, setApprovals] = React.useState([]);
 
   React.useEffect(() => {
+    if (filePath.length === 0) {
+      setFilePath([...filePath, data.folder.sharepointId]);
+    }
+  }, [data, setFilePath, filePath]);
+
+  React.useEffect(() => {
     if (files.currentData) {
       setFormattedFiles(files.currentData.map(file => ({
         ...file,
@@ -229,10 +235,19 @@ const BasicInfo = ({data}) => {
     }
   }
 
-  const viewFile = async (event) => {
-  }
-
-  console.log(data.approvals);
+  const FileActionBar = () => (
+    <React.Fragment>
+      <HStack>
+        <IconButton
+          variant="outline"
+          aria-label="add client"
+          icon={<FiArrowLeft/>}
+          onClick={() => navigateToFolder(filePath[filePath.length - 1])}
+          margin={"2"}
+        />
+      </HStack>
+    </React.Fragment>
+  );
 
   return (
     <>
@@ -279,6 +294,7 @@ const BasicInfo = ({data}) => {
         cellKeys={["name", "size", "createdby", "createdtime"]}
         key={"id"}
         fileTable={true}
+        ActionBar={FileActionBar}
       />
     </>
   );

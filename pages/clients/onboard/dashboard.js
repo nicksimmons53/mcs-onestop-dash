@@ -379,16 +379,14 @@ export default function Dashboard() {
               </Tr>
             ))}
           </Tbody>
-          <Tr>
-            <Td/>
-            <Td/>
-            <Td/>
-            <Td/>
-            <Box display={"flex"} justifyContent={"flex-end"}>
-              <Td>Total # of Clients: {clients.length}</Td>
-            </Box>
-          </Tr>
+          <Divider />
         </Table>
+
+        <HStack justify={"end"}>
+          <Text m={4}>Total # of Clients: {clients.length}</Text>
+        </HStack>
+
+        <Divider />
 
         <HStack justifyContent={"center"} p={3}>
           <Pagination/>
